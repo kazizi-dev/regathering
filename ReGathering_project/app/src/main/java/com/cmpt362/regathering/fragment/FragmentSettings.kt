@@ -1,10 +1,12 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.fragment
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.cmpt362.regathering.activity.ProfileActivity
+import com.cmpt362.regathering.R
 
 /**
  * FragmentSettings class that extends PreferenceFragmentCompat class

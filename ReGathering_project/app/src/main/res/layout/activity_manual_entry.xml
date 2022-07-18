@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".ManualEntryActivity">
+    tools:context=".activity.ManualEntryActivity">
     <ListView
         android:id="@+id/list_view_manual_entry"
         android:layout_width="match_parent"

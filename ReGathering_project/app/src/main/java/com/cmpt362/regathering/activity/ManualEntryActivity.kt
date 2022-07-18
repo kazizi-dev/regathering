@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.activity
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.cmpt362.regathering.R
+import com.cmpt362.regathering.fragment.InputDialogFragment
 import java.util.*
 
 /**

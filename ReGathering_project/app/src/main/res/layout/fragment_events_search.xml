@@ -10,17 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <EditText
-            android:layout_width="300dp"
+            android:id="@+id/edit_text_search"
+            android:layout_width="262dp"
             android:layout_height="wrap_content"
-            android:hint="@string/search"
-            android:id="@+id/edit_text_search"/>
+            android:hint="@string/search" />
 
         <Button
+            android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
-            android:id="@+id/search_button"/>
+            android:text="@string/search_button_text"
+            android:textSize="12sp" />
     </LinearLayout>
 
 

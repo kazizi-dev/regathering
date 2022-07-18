@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.activity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

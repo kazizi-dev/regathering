@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.viewmodel
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData

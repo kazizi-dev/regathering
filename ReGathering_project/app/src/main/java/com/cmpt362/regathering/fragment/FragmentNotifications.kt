@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.cmpt362.regathering.R
 
 
 /**

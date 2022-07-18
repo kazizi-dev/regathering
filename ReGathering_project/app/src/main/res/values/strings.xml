@@ -38,7 +38,8 @@
     <string name="enter_a_biography">Enter a biography</string>
     <string name="location">Location</string>
     <string name="your_location">Your location</string>
-    <string name="search">Search:</string>
+    <string name="search">Type Something</string>
+    <string name="search_button_text">Search</string>
     <string-array name="input_types">
         <item>Manual Entry</item>
         <item>GPS</item>

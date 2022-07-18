@@ -20,14 +20,14 @@
         android:theme="@style/Theme.ReGathering"
         tools:targetApi="32">
         <activity
-            android:name="com.cmpt362.regathering.GpsActivity"
+            android:name="com.cmpt362.regathering.activity.GpsActivity"
             android:label="Map"
             android:exported="false" />
         <activity
-            android:name="com.cmpt362.regathering.ManualEntryActivity"
+            android:name="com.cmpt362.regathering.activity.ManualEntryActivity"
             android:exported="false" />
         <activity
-            android:name="com.cmpt362.regathering.StartActivity"
+            android:name="com.cmpt362.regathering.activity.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name="com.cmpt362.regathering.ProfileActivity"
+            android:name="com.cmpt362.regathering.activity.ProfileActivity"
             android:exported="true">
         </activity>
 

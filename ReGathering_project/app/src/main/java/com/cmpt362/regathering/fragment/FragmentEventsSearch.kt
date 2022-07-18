@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import com.cmpt362.regathering.R
 
 
 /**
@@ -49,10 +50,12 @@ class FragmentEventsSearch: Fragment() {
 
         btnSearch.setOnClickListener {
             listResults.clear()
-            if(editTextSearch.text.toString() == "Computer Science"){
+
+            val input = editTextSearch.text.toString().lowercase().trim()
+            if(input == "computer science"){
                 listResults.addAll(SEARCHED_EVENTS_COMPUTER_SCIENCE)
             }
-            else if(editTextSearch.text.toString() == "Meetup"){
+            else if(input == "meetup"){
                 listResults.addAll(SEARCHED_EVENTS_MEETUP)
             }
             arrayAdapter.notifyDataSetChanged()

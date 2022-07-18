@@ -1,8 +1,9 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.cmpt362.regathering.R
 
 /**
  * GpsActivity opens when user chooses GPS in Input type of the Start fragment

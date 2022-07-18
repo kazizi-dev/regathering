@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.activity
 
 
 import android.content.Context
@@ -15,6 +15,10 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.cmpt362.regathering.R
+import com.cmpt362.regathering.Util
+import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
+import com.cmpt362.regathering.viewmodel.MyViewModel
 import java.io.ByteArrayOutputStream
 
 /**
@@ -28,7 +32,7 @@ class ProfileActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profile)
         Util.checkPermissions(this)
         imageView = findViewById(R.id.profile_image_view)
 

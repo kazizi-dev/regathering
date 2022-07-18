@@ -1,4 +1,4 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.fragment
 
 import android.app.*
 import android.content.DialogInterface
@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import com.cmpt362.regathering.activity.ProfileActivity
+import com.cmpt362.regathering.R
 
 /**
  * ProfilePictureDialogFragment used to show a dialog that gives user choice where

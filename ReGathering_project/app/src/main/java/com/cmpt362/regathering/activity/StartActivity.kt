@@ -1,9 +1,14 @@
-package com.cmpt362.regathering
+package com.cmpt362.regathering.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import com.cmpt362.regathering.R
+import com.cmpt362.regathering.fragment.FragmentEventsSearch
+import com.cmpt362.regathering.fragment.FragmentHome
+import com.cmpt362.regathering.fragment.FragmentNotifications
+import com.cmpt362.regathering.fragment.FragmentSettings
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.ArrayList
@@ -20,7 +25,7 @@ class StartActivity : AppCompatActivity() {
     private lateinit var fragments: ArrayList<Fragment>
     private lateinit var tab: TabLayout
     private lateinit var viewPager: ViewPager2
-    private lateinit var myFragmentStateAdapter:StartActivityFragmentStateAdapter
+    private lateinit var myFragmentStateAdapter: StartActivityFragmentStateAdapter
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private lateinit var tabConfigurationStrategy: TabLayoutMediator.TabConfigurationStrategy
     private val TAB_TEXT = arrayOf("home", "search", "notifications", "settings")
@@ -46,7 +51,7 @@ class StartActivity : AppCompatActivity() {
         viewPager.adapter = myFragmentStateAdapter
 
         tabConfigurationStrategy = TabLayoutMediator.TabConfigurationStrategy(){
-                tab: TabLayout.Tab, position: Int ->
+            tab: TabLayout.Tab, position: Int ->
             tab.text = TAB_TEXT[position]
         }
         tabLayoutMediator = TabLayoutMediator(tab, viewPager, tabConfigurationStrategy)
