@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Account Preferences">
+        <Preference
+            android:key="settings_profile"
+            android:summary="Edit your profile here"
+            android:title="User Profile"/>
+        <CheckBoxPreference
+            android:key="checkbox"
+            android:title="Enable notifications" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Account Settings">
+        <ListPreference
+            android:entries="@array/account_privacy_preferences"
+            android:entryValues="@array/account_privacy_preferences_values"
+            android:key="account_privacy_preference"
+            android:summary="Select the account privacy mode"
+            android:title="Account Privacy" />
+        <EditTextPreference
+            android:key="interests_preference"
+            android:summary="Please enter your interests"
+            android:title="Interests" />
+    </PreferenceCategory>
+    <!--<PreferenceCategory android:title="Misc.">
+        <Preference
+            android:key="webpage"
+            android:summary="https://www.sfu.ca/computing.html"
+            android:title="Webpage">
+        </Preference>
+    </PreferenceCategory>-->
+</PreferenceScreen>

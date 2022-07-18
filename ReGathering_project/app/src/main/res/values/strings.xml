@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">ReGathering</string>
+    <string name="profile_header_text">Profile:</string>
+    <string name="profile_picture_description_text">Profile picture.</string>
+    <string name="change_button_text">Change</string>
+    <string name="name_text">Name:</string>
+    <string name="name_edit_hint">Your Name</string>
+    <string name="email_text">Email</string>
+    <string name="email_edit_hint">Your Email</string>
+    <string name="phone_text">Phone</string>
+    <string name="phone_edit_hint">Your Phone Number</string>
+    <string name="gender_text">Gender</string>
+    <string name="female_radio_text">Female</string>
+    <string name="male_radio_text">Male</string>
+    <string name="class_text">Class</string>
+    <string name="class_edit_hint">eg. 2012</string>
+    <string name="major_text">Major</string>
+    <string name="major_edit_hint">Your Major</string>
+    <string name="save_button_text">Save</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="saved_username">username_key</string>
+    <string name="saved_email">email_key</string>
+    <string name="saved_number">phone_number_key</string>
+    <string name="saved_gender">gender_key</string>
+    <string name="saved_class_year">class_year_key</string>
+    <string name="saved_major">major_key</string>
+    <string name="saved_image">image_key</string>
+    <string name="settings_nav_title">Settings</string>
+    <string name="input_type">Input type</string>
+    <string name="activity_type">Activity Type</string>
+    <string name="start">Start</string>
+    <string name="save_gps_button">Save</string>
+    <string name="cancel_gps_button">Cancel</string>
+    <string name="tv_home_title_upcoming">Upcoming events</string>
+    <string name="tv_home_title_suggested">Suggested events</string>
+    <string name="tv_search_results">Results of the search:</string>
+    <string name="bio">Bio</string>
+    <string name="enter_a_biography">Enter a biography</string>
+    <string name="location">Location</string>
+    <string name="your_location">Your location</string>
+    <string name="search">Search:</string>
+    <string-array name="input_types">
+        <item>Manual Entry</item>
+        <item>GPS</item>
+        <item>Automatic</item>
+    </string-array>
+    <string-array name="activity_types">
+        <item>Running</item>
+        <item>Walking</item>
+        <item>Standing</item>
+        <item>Cycling</item>
+        <item>Hiking</item>
+        <item>Downhill Skiing</item>
+        <item>Cross-Country Skiing</item>
+        <item>Snowboarding</item>
+        <item>Skating</item>
+        <item>Swimming</item>
+        <item>Mountain Biking</item>
+        <item>Wheelchair</item>
+        <item>Elliptical</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="account_privacy_preferences">
+        <item>Public</item>
+        <item>Private</item>
+    </string-array>
+    <string-array name="account_privacy_preferences_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>
