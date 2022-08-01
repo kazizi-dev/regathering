@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "254405914223",
+    "project_id": "regathering-d1a1d",
+    "storage_bucket": "regathering-d1a1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254405914223:android:72d4a771fb1c050838a79a",
+        "android_client_info": {
+          "package_name": "com.cmpt362.regathering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254405914223-v633j6emcbig3cctfuvuuffgp4p72lb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEycJ9qRp33ccuKkYjIgPzIG7OQp9HGiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254405914223-v633j6emcbig3cctfuvuuffgp4p72lb9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
