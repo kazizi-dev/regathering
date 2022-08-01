@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "MyRuns"
+rootProject.name = "Regathering"
 include ':app'

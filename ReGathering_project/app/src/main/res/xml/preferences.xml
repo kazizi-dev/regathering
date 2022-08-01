@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Account Preferences">
         <Preference
             android:key="settings_profile"
@@ -22,11 +21,4 @@
             android:summary="Please enter your interests"
             android:title="Interests" />
     </PreferenceCategory>
-    <!--<PreferenceCategory android:title="Misc.">
-        <Preference
-            android:key="webpage"
-            android:summary="https://www.sfu.ca/computing.html"
-            android:title="Webpage">
-        </Preference>
-    </PreferenceCategory>-->
 </PreferenceScreen>
