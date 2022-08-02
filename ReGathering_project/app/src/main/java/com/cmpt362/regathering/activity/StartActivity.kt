@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.cmpt362.regathering.R
+import com.cmpt362.regathering.activity.StartActivityFragmentStateAdapter
 import com.cmpt362.regathering.fragment.FragmentEventsSearch
 import com.cmpt362.regathering.fragment.FragmentHome
 import com.cmpt362.regathering.fragment.FragmentNotifications
