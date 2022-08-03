@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Account Preferences">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Account Preferences" app:iconSpaceReserved="false">
         <Preference
             android:key="settings_profile"
             android:summary="Edit your profile here"
@@ -8,17 +9,20 @@
         <CheckBoxPreference
             android:key="checkbox"
             android:title="Enable notifications" />
+        <EditTextPreference
+            android:key="interests_preference"
+            android:summary="Please enter your interests"
+            android:title="Interests" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Account Settings">
+    <PreferenceCategory android:title="Privacy"/>
         <ListPreference
             android:entries="@array/account_privacy_preferences"
             android:entryValues="@array/account_privacy_preferences_values"
             android:key="account_privacy_preference"
             android:summary="Select the account privacy mode"
             android:title="Account Privacy" />
-        <EditTextPreference
-            android:key="interests_preference"
-            android:summary="Please enter your interests"
-            android:title="Interests" />
-    </PreferenceCategory>
+        <Preference
+            android:key="user_logout"
+            android:summary=""
+            android:title="Log Out"/>
 </PreferenceScreen>

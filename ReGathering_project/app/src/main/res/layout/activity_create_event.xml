@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".activity.ManualEntryActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventImage_ll"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="189dp"
+            android:layout_height="152dp"
+            android:layout_weight="1"
+            android:id="@+id/profile_image_view"
+            android:contentDescription="@string/profile_picture_description_text"
+            app:srcCompat="@drawable/dart" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_button_text"
+            android:layout_weight="1"
+            android:layout_marginTop="50dp"
+            android:id="@+id/change_button"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_view_manual_entry"
+        android:layout_width="412dp"
+        android:layout_height="506dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_save_manual_entry"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventImage_ll" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_gps_button"
+            android:id="@+id/button_save_manual_entry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_gps_button"
+            android:id="@+id/button_cancel_manual_entry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

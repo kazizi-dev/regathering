@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.cmpt362.regathering.R
+import com.cmpt362.regathering.activity.StartActivityFragmentStateAdapter
 import com.cmpt362.regathering.fragment.FragmentEventsSearch
 import com.cmpt362.regathering.fragment.FragmentHome
 import com.cmpt362.regathering.fragment.FragmentNotifications
@@ -28,7 +29,7 @@ class StartActivity : AppCompatActivity() {
     private lateinit var myFragmentStateAdapter: StartActivityFragmentStateAdapter
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private lateinit var tabConfigurationStrategy: TabLayoutMediator.TabConfigurationStrategy
-    private val TAB_TEXT = arrayOf("home", "search", "notifications", "settings")
+    private val TAB_TEXT = arrayOf("home", "events", "notifications", "settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
