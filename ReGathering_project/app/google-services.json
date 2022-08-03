@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "525973767111",
+    "project_id": "regathering-ee0a4",
+    "storage_bucket": "regathering-ee0a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525973767111:android:de902ca4162a0e0ed0cfe2",
+        "android_client_info": {
+          "package_name": "com.cmpt362.regathering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525973767111-dnvdnn2acv44d70h5uljap8ht760c1ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdRE4qTdVxi1f9IfjIHtsP_2qtPwOxGOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525973767111-dnvdnn2acv44d70h5uljap8ht760c1ne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525973767111:android:d397c2e324471763d0cfe2",
+        "android_client_info": {
+          "package_name": "com.example.final_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525973767111-dnvdnn2acv44d70h5uljap8ht760c1ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdRE4qTdVxi1f9IfjIHtsP_2qtPwOxGOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525973767111-dnvdnn2acv44d70h5uljap8ht760c1ne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
