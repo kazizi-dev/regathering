@@ -8,15 +8,12 @@ import android.view.View
 import android.widget.*
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.fragment.InputDialogFragment
+import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
 import java.util.*
 
 
-class ManualEntryActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private val OPTIONS = arrayOf(
-        "Date", "Time", "Duration",
-        "Distance", "Calories", "Heart Rate",
-        "Comment"
-    )
+class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private val OPTIONS = arrayOf("Date", "Time", "Name", "Comment", "Location")
     private val calendar = Calendar.getInstance()
     private lateinit var list_view: ListView
     private lateinit var buttonSave : Button
@@ -24,7 +21,7 @@ class ManualEntryActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manual_entry)
+        setContentView(R.layout.activity_create_event)
 
         list_view = findViewById(R.id.list_view_manual_entry)
 
@@ -57,6 +54,11 @@ class ManualEntryActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             Toast.makeText(this, "Entry discarded.", Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+
+    fun onClickChange(view:View){
+        val profilePictureDialogFragment = ProfilePictureDialogFragment()
+        profilePictureDialogFragment.show(supportFragmentManager, "tag")
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {

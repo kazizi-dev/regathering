@@ -29,7 +29,7 @@ class StartActivity : AppCompatActivity() {
     private lateinit var myFragmentStateAdapter: StartActivityFragmentStateAdapter
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private lateinit var tabConfigurationStrategy: TabLayoutMediator.TabConfigurationStrategy
-    private val TAB_TEXT = arrayOf("home", "search", "notifications", "settings")
+    private val TAB_TEXT = arrayOf("home", "events", "notifications", "settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

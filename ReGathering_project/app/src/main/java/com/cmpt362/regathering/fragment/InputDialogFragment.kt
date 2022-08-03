@@ -24,23 +24,24 @@ class InputDialogFragment:DialogFragment(), DialogInterface.OnClickListener {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
         if(bundle?.getInt(DIALOG_KEY) == 2){
-            builder.setTitle("Duration")
+            builder.setTitle("Name")
+            val editText = view.findViewById<EditText>(R.id.edit_text_input_fragment)
+            editText.inputType = EditText.AUTOFILL_TYPE_TEXT
+            editText.hint = "Event name"
         }
         else if(bundle?.getInt(DIALOG_KEY) == 3){
-            builder.setTitle("Distance")
-        }
-        else if(bundle?.getInt(DIALOG_KEY) == 4){
-            builder.setTitle("Calories")
-        }
-        else if(bundle?.getInt(DIALOG_KEY) == 5){
-            builder.setTitle("Heart Rate")
-        }
-        else if(bundle?.getInt(DIALOG_KEY) == 6){
             builder.setTitle("Comment")
             val editText = view.findViewById<EditText>(R.id.edit_text_input_fragment)
             editText.inputType = EditText.AUTOFILL_TYPE_TEXT
-            editText.hint = "How did it go? Notes here."
+            editText.hint = "Write about your event!"
         }
+        else if(bundle?.getInt(DIALOG_KEY) == 4){
+            builder.setTitle("Location")
+            val editText = view.findViewById<EditText>(R.id.edit_text_input_fragment)
+            editText.inputType = EditText.AUTOFILL_TYPE_TEXT
+            editText.hint = "Location"
+        }
+
         builder.setPositiveButton("ok", this)
         builder.setNegativeButton("cancel", this)
         dialog = builder.create()
