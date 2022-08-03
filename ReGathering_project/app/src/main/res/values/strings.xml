@@ -33,6 +33,7 @@
     <string name="cancel_gps_button">Cancel</string>
     <string name="tv_home_title_upcoming">Upcoming events</string>
     <string name="tv_home_title_suggested">Suggested events</string>
+    <string name="tv_home_title_fromdb">Events from database</string>
     <string name="tv_search_results">Results of the search:</string>
     <string name="bio">Bio</string>
     <string name="enter_a_biography">Enter a biography</string>
@@ -40,6 +41,7 @@
     <string name="your_location">Your location</string>
     <string name="search">Type Something</string>
     <string name="search_button_text">Search</string>
+    <string name="upcoming_events">Upcoming Events</string>
     <string-array name="input_types">
         <item>Manual Entry</item>
         <item>GPS</item>

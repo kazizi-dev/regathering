@@ -26,7 +26,7 @@ class FragmentSettings: PreferenceFragmentCompat() {
     /**
      * Method triggered when user clicks any setting on the settings fragment
      */
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
         val key = preference!!.key
         if(key == "settings_profile"){
             val intent = Intent(requireActivity(), ProfileActivity::class.java)
