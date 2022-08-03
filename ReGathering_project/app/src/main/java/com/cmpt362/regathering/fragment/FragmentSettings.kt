@@ -7,6 +7,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.cmpt362.regathering.activity.ProfileActivity
 import com.cmpt362.regathering.R
+import com.cmpt362.regathering.activity.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * FragmentSettings class that extends PreferenceFragmentCompat class
@@ -14,6 +16,8 @@ import com.cmpt362.regathering.R
  * to open Settings tab in the navigation bar
  */
 class FragmentSettings: PreferenceFragmentCompat() {
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -32,6 +36,11 @@ class FragmentSettings: PreferenceFragmentCompat() {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(preference.summary as String?)
             startActivity(intent)
+        }
+        else if(key == "user_logout"){
+            firebaseAuth.signOut()
+
+            startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
         return true
     }
