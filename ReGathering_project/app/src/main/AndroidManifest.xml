@@ -27,6 +27,12 @@
             android:name="com.cmpt362.regathering.activity.ManualEntryActivity"
             android:exported="false" />
         <activity
+            android:name="com.cmpt362.regathering.activity.CreateEventActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.cmpt362.regathering.activity.ViewEventActivity"
+            android:exported="false" />
+        <activity
             android:name="com.cmpt362.regathering.activity.StartActivity"
             android:exported="true">
             <intent-filter>
