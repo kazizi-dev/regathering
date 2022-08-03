@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.activity.CreateEventActivity
 import com.cmpt362.regathering.activity.ViewEventActivity
+import com.cmpt362.regathering.viewmodel.MyViewModel
 
 
 /**
@@ -17,20 +18,6 @@ import com.cmpt362.regathering.activity.ViewEventActivity
  * in the StartActivity
  */
 class FragmentEventsSearch: Fragment() {
-    private var SEARCHED_EVENTS_COMPUTER_SCIENCE = arrayOf(
-                        "Computer Science meetup\n888 University Drive" +
-                            "\nJuly 30th, 2022",
-                        "Computer Science CO-OP workshop\n888 University Drive" +
-                                "\nJuly 20th, 2022",
-                        "Presentation: Moral issues in Computer Science\n888 University Drive" +
-                                "\nAugust 3rd, 2022")
-    private var SEARCHED_EVENTS_MEETUP = arrayOf(
-                        "Computer Science meetup\n888 University Drive" +
-                            "\nJuly 30th, 2022",
-                        "Biology meetup\n888 University Drive" +
-                                "\nJuly 25th, 2022",
-                        "Chemistry meetup\n888 University Drive" +
-                                "\nAugust 1st, 2022")
     private lateinit var listViewResults: ListView
     private lateinit var listResults: ArrayList<String>
     private lateinit var btnSearch: Button
@@ -56,15 +43,17 @@ class FragmentEventsSearch: Fragment() {
 
         }
 
+        val myViewModel = MyViewModel()
+
         btnSearch.setOnClickListener {
             listResults.clear()
 
             val input = editTextSearch.text.toString().lowercase().trim()
             if(input == "computer science"){
-                listResults.addAll(SEARCHED_EVENTS_COMPUTER_SCIENCE)
+                listResults.addAll(myViewModel.SEARCHED_EVENTS_COMPUTER_SCIENCE)
             }
             else if(input == "meetup"){
-                listResults.addAll(SEARCHED_EVENTS_MEETUP)
+                listResults.addAll(myViewModel.SEARCHED_EVENTS_MEETUP)
             }
             arrayAdapter.notifyDataSetChanged()
         }

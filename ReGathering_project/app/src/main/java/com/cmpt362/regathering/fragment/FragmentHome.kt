@@ -1,20 +1,29 @@
 package com.cmpt362.regathering.fragment
 
+//import com.cmpt362.regathering.adapter.EventListAdapter
+import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.adapter.EventAdapter
-//import com.cmpt362.regathering.adapter.EventListAdapter
-import com.cmpt362.regathering.database.Event
 import com.cmpt362.regathering.databinding.FragmentHomeBinding
+import com.cmpt362.regathering.model.Event
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -35,7 +44,6 @@ class FragmentHome: Fragment(),
     lateinit var eventAdapter: EventAdapter
 
     private lateinit var fragmentView: View
-//    private lateinit var eventArrayAdapter: EventListAdapter
     private lateinit var listViewEvents: ListView
     private lateinit var eventArrayList: ArrayList<Event>
 
@@ -85,6 +93,7 @@ class FragmentHome: Fragment(),
                 binding.recyclerEvents.context,
                 LinearLayoutManager.HORIZONTAL
         ))
+
     }
 
     override fun onStart() {
@@ -103,5 +112,17 @@ class FragmentHome: Fragment(),
     override fun onEventSelected(event: DocumentSnapshot) {
         // TODO: Go to the details page for the selected restaurant
         println("DEBUG: Selected event -> $event")
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Cancel Attendance?")
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            firestore.collection("events").document(event.id)
+            .delete()
+            .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
+            .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
+        }
+        builder.setNegativeButton("No"){dialog, which -> }
+        builder.show()
     }
 }

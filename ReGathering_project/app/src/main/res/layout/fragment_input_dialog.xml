@@ -7,7 +7,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/edit_text_input_fragment"/>
+        android:inputType="text"
+        android:id="@+id/edit_text_input_fragment_id"/>
 
 </LinearLayout>

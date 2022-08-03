@@ -16,4 +16,11 @@ class MyViewModel: ViewModel() {
     val userGender = MutableLiveData<String>()
     val userClass = MutableLiveData<String>()
     val userMajor = MutableLiveData<String>()
+
+
+    var SEARCHED_EVENTS_COMPUTER_SCIENCE = arrayOf(
+                        "Computer Science Git Workshop\n888 University Drive, CSIL Lab Room 2074" +
+                            "\n2022-08-24 12:00")
+
+    var SEARCHED_EVENTS_MEETUP = arrayOf("")
 }

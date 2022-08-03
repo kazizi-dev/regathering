@@ -2,20 +2,21 @@ package com.cmpt362.regathering.activity
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintSet.GONE
+import androidx.appcompat.app.AppCompatActivity
 import com.cmpt362.regathering.R
-import com.cmpt362.regathering.fragment.InputDialogFragment
 import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
+import com.cmpt362.regathering.model.Event
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
 class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private val OPTIONS = arrayOf("Date: July 20th, 2022", "12:00pm", "Computer Science meeting",
-        "Come join us for our weekly meeting!", "SFU student union building")
+    private val OPTIONS = arrayOf("2022-08-24 12:00", "Computer Science Git Workshop",
+        "Come join us for our weekly meeting!", "CSIL Lab Room 2074")
 
     private lateinit var list_view: ListView
     private lateinit var buttonSave : Button
@@ -35,9 +36,19 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
         buttonSave = findViewById(R.id.button_save_manual_entry)
         buttonCancel = findViewById(R.id.button_cancel_manual_entry)
 
-        buttonSave.setText("Join")
+        buttonSave.text = "Join"
 
         buttonSave.setOnClickListener(){
+            val db = Firebase.firestore
+            val newEvent = Event()
+            newEvent.name = OPTIONS[1]
+            newEvent.date = OPTIONS[0]
+            newEvent.description = OPTIONS[2]
+            newEvent.location = OPTIONS[3]
+            db.collection("events").document(UUID.randomUUID().toString()).set(newEvent).addOnSuccessListener {
+              it -> println("New event created with the name: ${newEvent.name}")
+            }
+
             finish()
         }
         buttonCancel.setOnClickListener(){

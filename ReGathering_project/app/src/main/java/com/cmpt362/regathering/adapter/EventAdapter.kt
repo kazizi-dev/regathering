@@ -3,13 +3,11 @@ package com.cmpt362.regathering.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.cmpt362.regathering.database.Event
+import com.cmpt362.regathering.model.Event
 import com.cmpt362.regathering.databinding.ItemEventBinding
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
-import java.text.SimpleDateFormat
-import java.util.*
 
 open class EventAdapter(query: Query, private val listener: OnEventSelectedListener) :
     FirestoreAdapter<EventAdapter.ViewHolder>(query) {
@@ -40,14 +38,8 @@ open class EventAdapter(query: Query, private val listener: OnEventSelectedListe
             }
 
             binding.eventItemName.text = event.name
-            binding.eventItemAddress.text = event.address
-
-            val eventDate = event.date?.toDate()
-            val simpleDateFormat = SimpleDateFormat("EEEE MMM dd - h:mm aa")
-            val calendar = Calendar.getInstance()
-            calendar.setTime(eventDate)
-
-            binding.eventItemDate.text = simpleDateFormat.format(calendar.time).toString()
+            binding.eventItemAddress.text = event.location
+            binding.eventItemDate.text = event.date
 
             // Click listener
             binding.root.setOnClickListener {
