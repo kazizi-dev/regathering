@@ -9,4 +9,4 @@ https://youtu.be/5tqWP8VQEio
 https://youtu.be/YE8TaveYPg8
 
 ### Show and tell 2
-https://youtu.be/g9qHQxbVfhk
+https://youtu.be/IzG1FVO0yiQ
