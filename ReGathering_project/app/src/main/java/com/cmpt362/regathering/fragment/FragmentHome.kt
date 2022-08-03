@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.adapter.EventAdapter
@@ -79,6 +80,11 @@ class FragmentHome: Fragment(),
         val layoutManager = LinearLayoutManager(context)
         binding.recyclerEvents.layoutManager = layoutManager
         binding.recyclerEvents.adapter = eventAdapter
+        binding.recyclerEvents.addItemDecoration(
+            DividerItemDecoration(
+                binding.recyclerEvents.context,
+                LinearLayoutManager.HORIZONTAL
+        ))
     }
 
     override fun onStart() {
