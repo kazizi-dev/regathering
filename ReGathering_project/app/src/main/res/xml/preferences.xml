@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Account Preferences">
+    <PreferenceCategory android:title="Account Preferences" app:iconSpaceReserved="false">
         <Preference
             android:key="settings_profile"
             android:summary="Edit your profile here"
@@ -10,7 +10,7 @@
             android:key="checkbox"
             android:title="Enable notifications" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Account Settings">
+    <PreferenceCategory android:title="Account Settings" app:iconSpaceReserved="false">
         <ListPreference
             android:entries="@array/account_privacy_preferences"
             android:entryValues="@array/account_privacy_preferences_values"
