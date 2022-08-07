@@ -61,6 +61,7 @@ class FragmentHome: Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getEventsFromDatabase("hostedEvents")
+        binding.switchViewEvents.text = "Hosted Events"
         binding.switchViewEvents.setOnClickListener(){
             hostedEvents = !hostedEvents
             if(hostedEvents){
