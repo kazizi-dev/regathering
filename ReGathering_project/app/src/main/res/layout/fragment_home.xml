@@ -9,13 +9,15 @@
         android:id="@+id/upcoming_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/upcoming_events"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"
+        android:padding="8dp"
+        android:text="@string/hosted_events"
         android:textSize="18sp"
-        android:padding="8dp"/>
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/switchViewEvents"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerEvents"
@@ -27,5 +29,11 @@
         app:layout_constraintTop_toBottomOf="@id/upcoming_events"
         tools:listitem="@layout/item_event"/>
 
+    <Switch
+        android:id="@+id/switchViewEvents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/upcoming_events" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

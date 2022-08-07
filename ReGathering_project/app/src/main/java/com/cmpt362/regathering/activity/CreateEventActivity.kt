@@ -12,6 +12,8 @@ import android.widget.*
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
 import com.cmpt362.regathering.model.Event
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -128,9 +130,13 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             newEvent.date = displayDate
             newEvent.description = displayDescription
             newEvent.location = displayLocation
-            db.collection("events").document(UUID.randomUUID().toString()).set(newEvent).addOnSuccessListener {
+            val id = UUID.randomUUID().toString()
+            db.collection("events").document(id).set(newEvent).addOnSuccessListener {
               it -> println("new event created with name: ${newEvent.name}")
+                db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .update("hostedEvents", FieldValue.arrayUnion(id))
             }
+
 
             finish()
         }

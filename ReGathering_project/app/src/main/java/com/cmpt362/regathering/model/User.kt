@@ -10,5 +10,6 @@ data class User (
     var joinedEvents: ArrayList<String> = ArrayList(),
     var suggestedEvents: ArrayList<String> = ArrayList(),
     var notifications: ArrayList<String> = ArrayList(),
-    var hostedEvents: ArrayList<String> = ArrayList()
+    var hostedEvents: ArrayList<String> = ArrayList(),
+    var userId: String = ""
 )

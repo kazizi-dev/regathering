@@ -62,6 +62,7 @@ class RegisterActivity: AppCompatActivity() {
                     newUser.firstName = firstName
                     newUser.lastName = lastName
                     newUser.interests = interests
+                    newUser.userId = it.result.user!!.uid
                     db.collection("users").document(it.result.user!!.uid).set(newUser).addOnSuccessListener {
                             it ->
                         // Show a notification or something indicating the event was created

@@ -42,6 +42,9 @@
     <string name="search">Type Something</string>
     <string name="search_button_text">Search</string>
     <string name="upcoming_events">Upcoming Events</string>
+    <string name="hosted_events">Hosted Events</string>
+    <string name="joined_events">Joined Events</string>
+    <string name="suggested_events">Suggested Events</string>
     <string-array name="input_types">
         <item>Manual Entry</item>
         <item>GPS</item>
