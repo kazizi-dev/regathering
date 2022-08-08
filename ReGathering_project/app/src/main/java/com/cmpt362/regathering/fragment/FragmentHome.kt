@@ -87,37 +87,40 @@ class FragmentHome: Fragment(),
             val hostedEvents = ArrayList<String>()
             hostedEvents.addAll(it.get(eventsType) as Collection<String>)
             println("debug: hostedEvents $hostedEvents")
-            eventsQuery = firestore.collection("events")
-                .whereIn(FieldPath.documentId(), hostedEvents)
-                .limit(LIMIT.toLong())
 
-            // RecyclerView
-            eventAdapter = object : EventAdapter(eventsQuery, this@FragmentHome) {
-                override fun onDataChanged() {
-                    // Show/hide content if the query returns empty.
-                    if (itemCount == 0) {
-                        binding.recyclerEvents.visibility = View.GONE
-                    } else {
-                        binding.recyclerEvents.visibility = View.VISIBLE
+            if(!hostedEvents.isEmpty()){
+                eventsQuery = firestore.collection("events")
+                    .whereIn(FieldPath.documentId(), hostedEvents)
+                    .limit(LIMIT.toLong())
+
+                // RecyclerView
+                eventAdapter = object : EventAdapter(eventsQuery, this@FragmentHome) {
+                    override fun onDataChanged() {
+                        // Show/hide content if the query returns empty.
+                        if (itemCount == 0) {
+                            binding.recyclerEvents.visibility = View.GONE
+                        } else {
+                            binding.recyclerEvents.visibility = View.VISIBLE
+                        }
+                    }
+
+                    override fun onError(e: FirebaseFirestoreException) {
+                        // Show a snackbar on errors
+                        Snackbar.make(binding.root,
+                            "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
                     }
                 }
 
-                override fun onError(e: FirebaseFirestoreException) {
-                    // Show a snackbar on errors
-                    Snackbar.make(binding.root,
-                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
-                }
+                val layoutManager = LinearLayoutManager(context)    
+                binding.recyclerEvents.layoutManager = layoutManager
+                binding.recyclerEvents.adapter = eventAdapter
+                binding.recyclerEvents.addItemDecoration(
+                    DividerItemDecoration(
+                        binding.recyclerEvents.context,
+                        LinearLayoutManager.HORIZONTAL
+                    ))
+                eventAdapter.startListening()
             }
-
-            val layoutManager = LinearLayoutManager(context)
-            binding.recyclerEvents.layoutManager = layoutManager
-            binding.recyclerEvents.adapter = eventAdapter
-            binding.recyclerEvents.addItemDecoration(
-                DividerItemDecoration(
-                    binding.recyclerEvents.context,
-                    LinearLayoutManager.HORIZONTAL
-                ))
-            eventAdapter.startListening()
         }
     }
 
