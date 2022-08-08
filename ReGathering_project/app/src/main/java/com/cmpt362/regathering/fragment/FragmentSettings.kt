@@ -5,20 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
-import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.activity.LoginActivity
 import com.cmpt362.regathering.activity.ProfileActivity
-import com.cmpt362.regathering.adapter.EventAdapter
 import com.cmpt362.regathering.model.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
@@ -42,10 +38,50 @@ class FragmentSettings: PreferenceFragmentCompat() {
      * Method triggered when user clicks any setting on the settings fragment
      */
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
-        val key = preference!!.key
+        val key = preference.key
         if(key == "settings_profile"){
             val intent = Intent(requireActivity(), ProfileActivity::class.java)
             startActivity(intent)
+        }
+        else if(key == "interests_preference"){
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Interests")
+
+            val input = EditText(requireContext())
+            input.inputType = InputType.TYPE_CLASS_TEXT
+
+            val userId: String = firebaseAuth.currentUser?.uid.toString()
+            var userInterests: ArrayList<String>
+
+            // read user interests from database
+            firestore.collection("users").document(userId).get().addOnSuccessListener {
+                val user = it.toObject<User>()!!
+                userInterests = user.interests
+                for(i in 0 until userInterests.size){
+                    if(i == 0){
+                        input.setText(userInterests[0])
+                    }
+                    else{
+                        val interests = input.text.toString() + "," + userInterests[i]
+                        input.setText(interests)
+                    }
+                }
+            }
+
+            // update dialog view with user input
+            builder.setView(input)
+
+            // save updated interests
+            builder.setPositiveButton("save") { dialog, which ->
+                userInterests = ArrayList<String>()
+                userInterests.addAll(input.text.split(","))
+
+                // save interests in the database
+                firestore.collection("users").document(userId)
+                    .update("interests", userInterests)
+            }
+            builder.setNegativeButton("cancel"){dialog, which -> }
+            builder.show()
         }
         else if(key == "user_logout"){
             firebaseAuth.signOut()

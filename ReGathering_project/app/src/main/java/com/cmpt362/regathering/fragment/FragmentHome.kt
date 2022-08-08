@@ -33,7 +33,7 @@ import com.google.firebase.ktx.Firebase
 class FragmentHome: Fragment(),
     EventAdapter.OnEventSelectedListener {
     companion object {
-        private const val LIMIT = 50
+        const val LIMIT = 50
     }
 
     var VIEW_OPTIONS = arrayOf("Hosted Events, Joined Events")
@@ -111,7 +111,7 @@ class FragmentHome: Fragment(),
                     }
                 }
 
-                val layoutManager = LinearLayoutManager(context)    
+                val layoutManager = LinearLayoutManager(context)
                 binding.recyclerEvents.layoutManager = layoutManager
                 binding.recyclerEvents.adapter = eventAdapter
                 binding.recyclerEvents.addItemDecoration(
