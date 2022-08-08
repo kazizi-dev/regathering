@@ -87,37 +87,43 @@ class FragmentHome: Fragment(),
             val hostedEvents = ArrayList<String>()
             hostedEvents.addAll(it.get(eventsType) as Collection<String>)
             println("debug: hostedEvents $hostedEvents")
-            eventsQuery = firestore.collection("events")
-                .whereIn(FieldPath.documentId(), hostedEvents)
-                .limit(LIMIT.toLong())
+            if(hostedEvents.isNotEmpty()){
+                eventsQuery = firestore.collection("events")
+                    .whereIn(FieldPath.documentId(), hostedEvents)
+                    .limit(LIMIT.toLong())
+                // RecyclerView
+                eventAdapter = object : EventAdapter(eventsQuery, this@FragmentHome) {
+                    override fun onDataChanged() {
+                        // Show/hide content if the query returns empty.
+                        if (itemCount == 0) {
+                            binding.recyclerEvents.visibility = View.GONE
+                        } else {
+                            binding.recyclerEvents.visibility = View.VISIBLE
+                        }
+                    }
 
-            // RecyclerView
-            eventAdapter = object : EventAdapter(eventsQuery, this@FragmentHome) {
-                override fun onDataChanged() {
-                    // Show/hide content if the query returns empty.
-                    if (itemCount == 0) {
-                        binding.recyclerEvents.visibility = View.GONE
-                    } else {
-                        binding.recyclerEvents.visibility = View.VISIBLE
+                    override fun onError(e: FirebaseFirestoreException) {
+                        // Show a snackbar on errors
+                        Snackbar.make(binding.root,
+                            "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
                     }
                 }
 
-                override fun onError(e: FirebaseFirestoreException) {
-                    // Show a snackbar on errors
-                    Snackbar.make(binding.root,
-                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
-                }
+                val layoutManager = LinearLayoutManager(context)
+                binding.recyclerEvents.layoutManager = layoutManager
+                binding.recyclerEvents.adapter = eventAdapter
+                binding.recyclerEvents.addItemDecoration(
+                    DividerItemDecoration(
+                        binding.recyclerEvents.context,
+                        LinearLayoutManager.HORIZONTAL
+                    ))
+                eventAdapter.startListening()
             }
-
-            val layoutManager = LinearLayoutManager(context)
-            binding.recyclerEvents.layoutManager = layoutManager
-            binding.recyclerEvents.adapter = eventAdapter
-            binding.recyclerEvents.addItemDecoration(
-                DividerItemDecoration(
-                    binding.recyclerEvents.context,
-                    LinearLayoutManager.HORIZONTAL
-                ))
-            eventAdapter.startListening()
+            else{
+                val layoutManager = LinearLayoutManager(context)
+                binding.recyclerEvents.layoutManager = layoutManager
+                binding.recyclerEvents.visibility = View.GONE
+            }
         }
     }
 
@@ -132,8 +138,9 @@ class FragmentHome: Fragment(),
 
     override fun onStop() {
         super.onStop()
-
-        eventAdapter.stopListening()
+        if(::eventAdapter.isInitialized){
+            eventAdapter.stopListening()
+        }
     }
 
     override fun onEventSelected(event: DocumentSnapshot) {
@@ -144,10 +151,22 @@ class FragmentHome: Fragment(),
             builder.setTitle("Cancel Event?")
 
             builder.setPositiveButton("Yes") { dialog, which ->
+                val tempId = event.id
                 firestore.collection("events").document(event.id)
                     .delete()
                     .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
                     .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
+                firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        it.reference.update("hostedEvents", FieldValue.arrayRemove(tempId))
+                    }
+                firestore.collection("users").get().addOnSuccessListener {
+                    for(document in it.documents){
+                        //val arrayOfJoinedEvents = document.get("joinedEvents") as ArrayList<*>
+                        document.reference.update("joinedEvents", FieldValue.arrayRemove(tempId))
+                    }
+                }
             }
             builder.setNegativeButton("No"){dialog, which -> }
             builder.show()
@@ -157,10 +176,12 @@ class FragmentHome: Fragment(),
             builder.setTitle("Cancel Attendance?")
 
             builder.setPositiveButton("Yes") { dialog, which ->
-                firestore.collection("events").document(event.id)
-                    .delete()
-                    .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
-                    .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
+                firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        it.reference.update("joinedEvents", FieldValue.arrayRemove(event.id))
+                        getEventsFromDatabase("joinedEvents")
+                    }
             }
             builder.setNegativeButton("No"){dialog, which -> }
             builder.show()

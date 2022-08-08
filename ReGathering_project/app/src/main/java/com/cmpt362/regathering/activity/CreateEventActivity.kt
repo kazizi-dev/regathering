@@ -4,18 +4,26 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.util.Base64
 import android.view.View
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import com.cmpt362.regathering.R
+import com.cmpt362.regathering.fragment.EventPictureDialogFragment
 import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
 import com.cmpt362.regathering.model.Event
+import com.cmpt362.regathering.viewmodel.MyViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 
@@ -25,11 +33,13 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var list_view: ListView
     private lateinit var buttonSave : Button
     private lateinit var buttonCancel : Button
+    private lateinit var buttonChange: Button
     private lateinit var arrayAdapter: ArrayAdapter<String>
     private lateinit var textViewDate: TextView
     private lateinit var textViewName: TextView
     private lateinit var textViewDesc: TextView
     private lateinit var textViewLoc: TextView
+    private lateinit var imageView: ImageView
 
     private var day = 0
     private var month = 0
@@ -48,6 +58,10 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private var displayDescription: String = ""
     private var displayLocation: String = ""
 
+    companion object{
+        lateinit var myViewModel: MyViewModel
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
@@ -60,6 +74,18 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         list_view = findViewById(R.id.list_view_manual_entry)
         buttonSave = findViewById(R.id.button_save_manual_entry)
         buttonCancel = findViewById(R.id.button_cancel_manual_entry)
+        buttonChange = findViewById(R.id.change_button)
+        imageView = findViewById(R.id.event_image)
+        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        myViewModel.eventImage.observe(this) { it ->
+            imageView.setImageBitmap(it)
+        }
+
+        buttonChange.setOnClickListener(){
+            val eventPictureDialogFragment = EventPictureDialogFragment()
+            eventPictureDialogFragment.show(supportFragmentManager, "tag")
+        }
+
 
         arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, OPTIONS)
         list_view.adapter = arrayAdapter
@@ -130,6 +156,7 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             newEvent.date = displayDate
             newEvent.description = displayDescription
             newEvent.location = displayLocation
+            newEvent.image = bitMapToString((imageView.drawable as BitmapDrawable).bitmap)
             val id = UUID.randomUUID().toString()
             db.collection("events").document(id).set(newEvent).addOnSuccessListener {
               it -> println("new event created with name: ${newEvent.name}")
@@ -185,5 +212,12 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         textViewDate.text = "Date: $savedYear-$savedMonth-$savedDay $savedHour:$savedMinute:00"
         displayDate = "$savedYear-$savedMonth-$savedDay $savedHour:$savedMinute:00"
+    }
+
+    private fun bitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 }

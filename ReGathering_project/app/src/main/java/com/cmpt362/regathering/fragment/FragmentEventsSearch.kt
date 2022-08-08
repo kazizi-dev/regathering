@@ -71,15 +71,20 @@ class FragmentEventsSearch: Fragment() {
             eventsRef.get().addOnSuccessListener {
                 for(document in it.documents){
                     val arrayName = document.get("name") as String
-                    val arrayNameSplit = arrayName.split(" ")
-                    val lowerCaseArrayName = ArrayList<String>()
-                    for(name in arrayNameSplit) {
-                        lowerCaseArrayName.add(name.lowercase())
+                    if(arrayName == input){
+                        listResults.add(document)
                     }
-                    for(name in lowerCaseArrayName){
-                        for(name_input in inputParsedLower){
-                            if(name == name_input){
-                                listResults.add(document)
+                    else{
+                        val arrayNameSplit = arrayName.split(" ")
+                        val lowerCaseArrayName = ArrayList<String>()
+                        for(name in arrayNameSplit) {
+                            lowerCaseArrayName.add(name.lowercase())
+                        }
+                        for(name in lowerCaseArrayName){
+                            for(name_input in inputParsedLower){
+                                if(name == name_input){
+                                    listResults.add(document)
+                                }
                             }
                         }
                     }

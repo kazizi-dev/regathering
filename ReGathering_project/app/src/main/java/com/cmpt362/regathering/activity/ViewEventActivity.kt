@@ -2,7 +2,10 @@ package com.cmpt362.regathering.activity
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +27,7 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
     private lateinit var list_view: ListView
     private lateinit var buttonJoin : Button
     private lateinit var buttonCancel : Button
+    private lateinit var imageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +38,11 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
         val id = intent.getStringExtra("id")
         val fireStore = Firebase.firestore
         list_view = findViewById(R.id.list_view_manual_entry)
+        imageView = findViewById(R.id.event_image)
         fireStore.collection("events").document(id!!).get().addOnSuccessListener {
+            if((it.get("image") as String).isNotEmpty()){
+                imageView.setImageBitmap(stringToBitMap(it.get("image") as String))
+            }
             arrayList.add(it.get("date") as String)
             arrayList.add(it.get("name") as String)
             arrayList.add(it.get("description") as String)
@@ -70,5 +78,15 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
 
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
         return
+    }
+    private fun stringToBitMap(encodedString: String?): Bitmap? {
+        return try {
+            val encodeByte =
+                Base64.decode(encodedString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.message
+            null
+        }
     }
 }

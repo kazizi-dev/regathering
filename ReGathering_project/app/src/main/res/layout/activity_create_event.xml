@@ -16,7 +16,7 @@
             android:layout_width="189dp"
             android:layout_height="152dp"
             android:layout_weight="1"
-            android:id="@+id/profile_image_view"
+            android:id="@+id/event_image"
             android:contentDescription="@string/profile_picture_description_text"
             app:srcCompat="@drawable/dart" />
 

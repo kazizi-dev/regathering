@@ -13,6 +13,10 @@
             android:key="interests_preference"
             android:summary="Please enter your interests"
             android:title="Interests" />
+        <!--<com.cmpt362.regathering.adapter.InterestsEditTextPreference
+            android:key="interests_preference"
+            android:summary="Please enter your interests"
+            android:title="Interests"/>-->
     </PreferenceCategory>
     <PreferenceCategory android:title="Privacy"/>
         <ListPreference

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
  */
 class MyViewModel: ViewModel() {
     val userImage = MutableLiveData<Bitmap>()
+    val eventImage = MutableLiveData<Bitmap>()
     val userName = MutableLiveData<String>()
     val userEmail = MutableLiveData<String>()
     val userPhone = MutableLiveData<String>()
