@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -58,28 +60,33 @@ class FragmentEventsSearch: Fragment() {
 
         btnSearch.setOnClickListener {
             listResults.clear()
-
             val input = editTextSearch.text.toString().trim()
-            println("debug: input $input")
             val inputParsed = input.split("$[^w']+")
-            val inputParsed1 = input.split(" ")
-            println("debug: inputParsed1[0] ${inputParsed1[0]}")
+            val inputParsedLower = ArrayList<String>()
+            for(word in inputParsed){
+                inputParsedLower.add(word.lowercase())
+            }
             val eventsRef = firestore.collection("events")
-            val events = eventsRef.whereGreaterThanOrEqualTo("name", inputParsed1[0])
-                .whereLessThanOrEqualTo("name", "${inputParsed1[0]}\uF7FF").get().addOnSuccessListener {
-                listResults.clear()
-                listResults.addAll(it.documents)
-                println("debug: $listResults")
+            listResults.clear()
+            eventsRef.get().addOnSuccessListener {
+                for(document in it.documents){
+                    val arrayName = document.get("name") as String
+                    val arrayNameSplit = arrayName.split(" ")
+                    val lowerCaseArrayName = ArrayList<String>()
+                    for(name in arrayNameSplit) {
+                        lowerCaseArrayName.add(name.lowercase())
+                    }
+                    for(name in lowerCaseArrayName){
+                        for(name_input in inputParsedLower){
+                            if(name == name_input){
+                                listResults.add(document)
+                            }
+                        }
+                    }
+                }
                 arrayAdapter.replace(listResults)
                 arrayAdapter.notifyDataSetChanged()
             }
-            println("debug: $events")
-            /*if(input == "computer science"){
-                listResults.addAll(myViewModel.SEARCHED_EVENTS_COMPUTER_SCIENCE)
-            }
-            else if(input == "meetup"){
-                listResults.addAll(myViewModel.SEARCHED_EVENTS_MEETUP)
-            }*/
             arrayAdapter.notifyDataSetChanged()
         }
 

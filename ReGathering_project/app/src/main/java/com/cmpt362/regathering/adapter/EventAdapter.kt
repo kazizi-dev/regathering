@@ -8,6 +8,7 @@ import com.cmpt362.regathering.databinding.ItemEventBinding
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import java.io.File.separator
 
 open class EventAdapter(query: Query, private val listener: OnEventSelectedListener) :
     FirestoreAdapter<EventAdapter.ViewHolder>(query) {
