@@ -1,14 +1,26 @@
 package com.cmpt362.regathering.fragment
 
+import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
+import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.cmpt362.regathering.activity.ProfileActivity
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.activity.LoginActivity
+import com.cmpt362.regathering.activity.ProfileActivity
+import com.cmpt362.regathering.adapter.EventAdapter
+import com.cmpt362.regathering.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 /**
  * FragmentSettings class that extends PreferenceFragmentCompat class
@@ -17,10 +29,13 @@ import com.google.firebase.auth.FirebaseAuth
  */
 class FragmentSettings: PreferenceFragmentCompat() {
     private val firebaseAuth = FirebaseAuth.getInstance()
-
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var eventsQuery: Query
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+
+        firestore = Firebase.firestore
     }
 
     /**
@@ -32,16 +47,12 @@ class FragmentSettings: PreferenceFragmentCompat() {
             val intent = Intent(requireActivity(), ProfileActivity::class.java)
             startActivity(intent)
         }
-        else if(key == "webpage"){
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(preference.summary as String?)
-            startActivity(intent)
-        }
         else if(key == "user_logout"){
             firebaseAuth.signOut()
-
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
-        return true
+
+        return false
+
     }
 }
