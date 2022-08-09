@@ -1,13 +1,22 @@
 package com.cmpt362.regathering.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.cmpt362.regathering.R
+import com.cmpt362.regathering.activity.ViewEventActivity
+import com.cmpt362.regathering.model.Event
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import org.w3c.dom.Document
 
 
 /**
@@ -16,23 +25,85 @@ import com.cmpt362.regathering.R
  * create an instance of this fragment.
  */
 class FragmentNotifications : Fragment() {
-    private val NOTIFICATION_CONTENT = arrayOf("\nSomeone added you as a friend!\n",
-                                                "\nHackathon events starts in 24 hours!\n",
-                                                "\nSuggested event: Vancouver Marathon!\n")
+    private val MESSAGE_VARIETY = arrayOf("\nYou got matched with this new event! (click)\n",
+                                                "\nNew event near you! (click)\n",
+                                                "\nWe think this event might be right for you! (click)\n")
     private lateinit var listViewNotifications: ListView
     private lateinit var listNotifications: ArrayList<String>
+
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var suggestedEvents: ArrayList<String>
+
+    private lateinit var arrayAdapter: ArrayAdapter<*>
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_notifications, container, false)
+
+        // initialize firestore
+        firestore = FirebaseFirestore.getInstance()
+
+        // suggested events for the user based on interest
+        suggestedEvents = ArrayList()
+
         listViewNotifications = view.findViewById(R.id.list_view_notifications)
         listNotifications = ArrayList()
-        val arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listNotifications)
+        arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listNotifications)
+
+
         listViewNotifications.adapter = arrayAdapter
-        listNotifications.addAll(NOTIFICATION_CONTENT)
+
+        firestore.collection("users").document(FirebaseAuth.getInstance().uid.toString())
+            .get().addOnSuccessListener { usersIt ->
+
+            var interests = usersIt.get("interests") as ArrayList<String>
+            val hostedEventsByUser = usersIt.get("hostedEvents") as ArrayList<String>
+
+            firestore.collection("events").whereEqualTo("name", interests[0]).get().addOnSuccessListener { eventsIt ->
+                for(event in eventsIt){
+                    if(!hostedEventsByUser.contains(event.id)){
+                        listNotifications.add("New event match: " + event.get("name").toString())
+                        arrayAdapter.notifyDataSetChanged()
+
+                        // update suggest events
+                        firestore.collection("users")
+                            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                            .update("suggestedEvents", event.id)
+                    }
+                }
+
+                arrayAdapter.notifyDataSetChanged()
+            }
+        }
+        arrayAdapter.notifyDataSetChanged()
+
+
+//        listViewNotifications.setOnItemClickListener() { parent: AdapterView<*>, textView: View, position: Int, id: Long ->
+//            val activityIntent = Intent(requireActivity(), ViewEventActivity::class.java)
+//            activityIntent.putExtra("id", arrayAdapter.getItem(position).toString())
+//            startActivity(activityIntent)
+//        }
+
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if(::arrayAdapter.isInitialized){
+            arrayAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if(::arrayAdapter.isInitialized){
+            arrayAdapter.notifyDataSetChanged()
+        }
+    }
 }
