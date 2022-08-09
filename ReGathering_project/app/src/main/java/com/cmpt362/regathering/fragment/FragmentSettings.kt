@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.cmpt362.regathering.R
@@ -16,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 /**
@@ -27,6 +30,7 @@ class FragmentSettings: PreferenceFragmentCompat() {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private lateinit var firestore: FirebaseFirestore
     private lateinit var eventsQuery: Query
+
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -87,8 +91,26 @@ class FragmentSettings: PreferenceFragmentCompat() {
             firebaseAuth.signOut()
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
-
-        return false
-
+//        else if(key == "interests_preference"){
+//            firestore.collection("users").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
+//                val stringToShow = (it.get("interests") as ArrayList<*>).joinToString(separator = ", ")
+//                //preference.title = stringToShow
+//                //(preference as EditTextPreference).text = stringToShow
+//                (preference as EditTextPreference).dialogMessage = stringToShow
+//            }
+//            preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener{preferenceHere, newValue ->
+//                val newString = newValue as String
+//                val newSplitArray = newString.split(", ")
+//                firestore.collection("users").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
+//                    for(word in newSplitArray){
+//                        if(word.isNotEmpty()){
+//                            it.reference.update("interests", FieldValue.arrayUnion(word))
+//                        }
+//                    }
+//                }
+//                true
+//            }
+//        }
+        return true
     }
 }

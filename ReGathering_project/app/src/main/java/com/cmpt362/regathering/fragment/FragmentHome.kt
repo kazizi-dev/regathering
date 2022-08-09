@@ -4,19 +4,14 @@ package com.cmpt362.regathering.fragment
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ListView
-import android.widget.Switch
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cmpt362.regathering.R
 import com.cmpt362.regathering.adapter.EventAdapter
 import com.cmpt362.regathering.databinding.FragmentHomeBinding
 import com.cmpt362.regathering.model.Event
@@ -88,11 +83,10 @@ class FragmentHome: Fragment(),
             hostedEvents.addAll(it.get(eventsType) as Collection<String>)
             println("debug: hostedEvents $hostedEvents")
 
-            if(!hostedEvents.isEmpty()){
+            if(hostedEvents.isNotEmpty()){
                 eventsQuery = firestore.collection("events")
                     .whereIn(FieldPath.documentId(), hostedEvents)
                     .limit(LIMIT.toLong())
-
                 // RecyclerView
                 eventAdapter = object : EventAdapter(eventsQuery, this@FragmentHome) {
                     override fun onDataChanged() {
@@ -121,6 +115,11 @@ class FragmentHome: Fragment(),
                     ))
                 eventAdapter.startListening()
             }
+            else{
+                val layoutManager = LinearLayoutManager(context)
+                binding.recyclerEvents.layoutManager = layoutManager
+                binding.recyclerEvents.visibility = View.GONE
+            }
         }
     }
 
@@ -135,8 +134,9 @@ class FragmentHome: Fragment(),
 
     override fun onStop() {
         super.onStop()
-
-        eventAdapter.stopListening()
+        if(::eventAdapter.isInitialized){
+            eventAdapter.stopListening()
+        }
     }
 
     override fun onEventSelected(event: DocumentSnapshot) {
@@ -147,10 +147,22 @@ class FragmentHome: Fragment(),
             builder.setTitle("Cancel Event?")
 
             builder.setPositiveButton("Yes") { dialog, which ->
+                val tempId = event.id
                 firestore.collection("events").document(event.id)
                     .delete()
                     .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
                     .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
+                firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        it.reference.update("hostedEvents", FieldValue.arrayRemove(tempId))
+                    }
+                firestore.collection("users").get().addOnSuccessListener {
+                    for(document in it.documents){
+                        //val arrayOfJoinedEvents = document.get("joinedEvents") as ArrayList<*>
+                        document.reference.update("joinedEvents", FieldValue.arrayRemove(tempId))
+                    }
+                }
             }
             builder.setNegativeButton("No"){dialog, which -> }
             builder.show()
@@ -160,10 +172,12 @@ class FragmentHome: Fragment(),
             builder.setTitle("Cancel Attendance?")
 
             builder.setPositiveButton("Yes") { dialog, which ->
-                firestore.collection("events").document(event.id)
-                    .delete()
-                    .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
-                    .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
+                firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        it.reference.update("joinedEvents", FieldValue.arrayRemove(event.id))
+                        getEventsFromDatabase("joinedEvents")
+                    }
             }
             builder.setNegativeButton("No"){dialog, which -> }
             builder.show()
