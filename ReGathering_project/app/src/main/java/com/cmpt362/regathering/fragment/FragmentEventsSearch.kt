@@ -5,21 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.activity.CreateEventActivity
 import com.cmpt362.regathering.activity.EventsListAdapter
 import com.cmpt362.regathering.activity.ViewEventActivity
 import com.cmpt362.regathering.viewmodel.MyViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**

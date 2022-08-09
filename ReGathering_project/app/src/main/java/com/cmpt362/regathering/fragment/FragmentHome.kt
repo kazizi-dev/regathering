@@ -49,7 +49,6 @@ class FragmentHome: Fragment(),
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -125,15 +124,15 @@ class FragmentHome: Fragment(),
 
     override fun onStart() {
         super.onStart()
+
         if(::eventAdapter.isInitialized){
             eventAdapter.startListening()
         }
-        // Start listening for Firestore updates
-        //eventAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
+
         if(::eventAdapter.isInitialized){
             eventAdapter.stopListening()
         }
@@ -150,7 +149,7 @@ class FragmentHome: Fragment(),
                 val tempId = event.id
                 firestore.collection("events").document(event.id)
                     .delete()
-                    .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
+                    .addOnSuccessListener{Log.d(TAG,"DocumentSnapshot successfully deleted!")}
                     .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
                 firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
                     .get()
