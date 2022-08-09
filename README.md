@@ -11,6 +11,10 @@ https://youtu.be/YE8TaveYPg8
 ### Show and tell 2
 https://www.youtube.com/watch?v=MhgmRSI6rYY
 
+### Team Contribution
+
 ![Team Contribution](https://i.imgur.com/0u3m2pf.png)
+
+### Thread Design Diagram
 
 ![Thread Design Diagram](https://user-images.githubusercontent.com/83630215/183580860-daf10485-ce75-4964-a25e-0d398d2ad433.png)
