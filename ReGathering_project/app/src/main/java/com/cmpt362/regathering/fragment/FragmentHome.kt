@@ -4,19 +4,14 @@ package com.cmpt362.regathering.fragment
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ListView
-import android.widget.Switch
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cmpt362.regathering.R
 import com.cmpt362.regathering.adapter.EventAdapter
 import com.cmpt362.regathering.databinding.FragmentHomeBinding
 import com.cmpt362.regathering.model.Event
@@ -33,7 +28,7 @@ import com.google.firebase.ktx.Firebase
 class FragmentHome: Fragment(),
     EventAdapter.OnEventSelectedListener {
     companion object {
-        private const val LIMIT = 50
+        const val LIMIT = 50
     }
 
     var VIEW_OPTIONS = arrayOf("Hosted Events, Joined Events")
@@ -54,7 +49,6 @@ class FragmentHome: Fragment(),
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -87,6 +81,7 @@ class FragmentHome: Fragment(),
             val hostedEvents = ArrayList<String>()
             hostedEvents.addAll(it.get(eventsType) as Collection<String>)
             println("debug: hostedEvents $hostedEvents")
+
             if(hostedEvents.isNotEmpty()){
                 eventsQuery = firestore.collection("events")
                     .whereIn(FieldPath.documentId(), hostedEvents)
@@ -129,15 +124,15 @@ class FragmentHome: Fragment(),
 
     override fun onStart() {
         super.onStart()
+
         if(::eventAdapter.isInitialized){
             eventAdapter.startListening()
         }
-        // Start listening for Firestore updates
-        //eventAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
+
         if(::eventAdapter.isInitialized){
             eventAdapter.stopListening()
         }
@@ -154,7 +149,7 @@ class FragmentHome: Fragment(),
                 val tempId = event.id
                 firestore.collection("events").document(event.id)
                     .delete()
-                    .addOnSuccessListener{ Log.d(TAG,"DocumentSnapshot successfully deleted!")}
+                    .addOnSuccessListener{Log.d(TAG,"DocumentSnapshot successfully deleted!")}
                     .addOnSuccessListener{e->Log.w(TAG, "Error deleting document: $e")}
                 firestore.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
                     .get()
