@@ -29,8 +29,8 @@
     <string name="input_type">Input type</string>
     <string name="activity_type">Activity Type</string>
     <string name="start">Start</string>
-    <string name="save_gps_button">Save</string>
-    <string name="cancel_gps_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
     <string name="tv_home_title_upcoming">Upcoming events</string>
     <string name="tv_home_title_suggested">Suggested events</string>
     <string name="tv_home_title_fromdb">Events from database</string>
@@ -45,6 +45,10 @@
     <string name="hosted_events">Hosted Events</string>
     <string name="joined_events">Joined Events</string>
     <string name="suggested_events">Suggested Events</string>
+    <string name="event_name">Event name</string>
+    <string name="event_location">Location</string>
+    <string name="event_date">Date</string>
+    <string name="event_description">Description</string>
     <string-array name="input_types">
         <item>Manual Entry</item>
         <item>GPS</item>

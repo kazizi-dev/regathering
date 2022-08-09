@@ -69,10 +69,14 @@ class FragmentNotifications : Fragment() {
                         listNotifications.add("New event match: " + event.get("name").toString())
                         arrayAdapter.notifyDataSetChanged()
 
+
+                        val suggestedEvents: ArrayList<String> = usersIt.get("suggestedEvents") as ArrayList<String>
+                        suggestedEvents.add(event.id)
+
                         // update suggest events
                         firestore.collection("users")
                             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-                            .update("suggestedEvents", event.id)
+                            .update("suggestedEvents", suggestedEvents)
                     }
                 }
 

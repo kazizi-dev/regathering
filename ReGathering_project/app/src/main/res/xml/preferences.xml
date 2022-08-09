@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Settings">
+    <PreferenceCategory android:title="Settings" app:iconSpaceReserved="false">
         <Preference
             android:key="settings_profile"
             android:summary="Edit profile here"
-            android:title="User Profile"/>
+            android:title="User Profile"
+            app:iconSpaceReserved="false"/>
         <Preference
             android:key="interests_preference"
             android:summary="Update interests here"
-            android:title="Interests" />
+            android:title="Interests"
+            app:iconSpaceReserved="false"/>
         <Preference
             android:key="user_logout"
             android:summary=""
-            android:title="Log Out"/>
+            android:title="Log Out"
+            app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 </PreferenceScreen>

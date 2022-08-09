@@ -127,6 +127,7 @@ class FragmentHome: Fragment(),
 
         if(::eventAdapter.isInitialized){
             eventAdapter.startListening()
+            eventAdapter.notifyDataSetChanged()
         }
     }
 
@@ -135,6 +136,7 @@ class FragmentHome: Fragment(),
 
         if(::eventAdapter.isInitialized){
             eventAdapter.stopListening()
+            eventAdapter.notifyDataSetChanged()
         }
     }
 
