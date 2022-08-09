@@ -142,7 +142,7 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             val db = Firebase.firestore
             val newEvent = Event()
             newEvent.name = binding.eventName.text.toString()
-            newEvent.date = "$savedYear-$savedMonth-$savedDay $savedHour:$savedMinute:00"
+            newEvent.date = "$savedYear-${savedMonth + 1}-$savedDay $savedHour:$savedMinute:00"
             newEvent.description = binding.eventDescription.text.toString()
             newEvent.location = binding.eventLocation.text.toString()
             newEvent.image = bitMapToString((imageView.drawable as BitmapDrawable).bitmap)
