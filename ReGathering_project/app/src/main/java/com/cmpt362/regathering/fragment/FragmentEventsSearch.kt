@@ -9,8 +9,17 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.activity.CreateEventActivity
+import com.cmpt362.regathering.activity.EventsListAdapter
 import com.cmpt362.regathering.activity.ViewEventActivity
 import com.cmpt362.regathering.viewmodel.MyViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -19,41 +28,69 @@ import com.cmpt362.regathering.viewmodel.MyViewModel
  */
 class FragmentEventsSearch: Fragment() {
     private lateinit var listViewResults: ListView
-    private lateinit var listResults: ArrayList<String>
+    private lateinit var listResults: ArrayList<DocumentSnapshot>
     private lateinit var btnSearch: Button
     private lateinit var btnCreateEvent: Button
     private lateinit var editTextSearch: EditText
+    lateinit var firestore: FirebaseFirestore
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        firestore = Firebase.firestore
         val view = inflater.inflate(R.layout.fragment_events_search, container, false)
         listViewResults = view.findViewById(R.id.list_view_search)
         btnSearch = view.findViewById(R.id.search_button)
         editTextSearch = view.findViewById(R.id.edit_text_search)
         btnCreateEvent = view.findViewById(R.id.createEvent_button)
         listResults = ArrayList()
-        val arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listResults)
+        val arrayAdapter = EventsListAdapter(requireActivity(), listResults)
         listViewResults.adapter = arrayAdapter
 
         listViewResults.setOnItemClickListener() { parent: AdapterView<*>, textView: View, position: Int, id: Long ->
+            println("debug: inside listener")
             val activityIntent = Intent(requireActivity(), ViewEventActivity::class.java)
+            println("debug: event id ${arrayAdapter.getItem(position).id}")
+            activityIntent.putExtra("id", arrayAdapter.getItem(position).id)
             startActivity(activityIntent)
-
         }
 
         val myViewModel = MyViewModel()
 
         btnSearch.setOnClickListener {
             listResults.clear()
-
-            val input = editTextSearch.text.toString().lowercase().trim()
-            if(input == "computer science"){
-                listResults.addAll(myViewModel.SEARCHED_EVENTS_COMPUTER_SCIENCE)
+            val input = editTextSearch.text.toString().trim()
+            val inputParsed = input.split("$[^w']+")
+            val inputParsedLower = ArrayList<String>()
+            for(word in inputParsed){
+                inputParsedLower.add(word.lowercase())
             }
-            else if(input == "meetup"){
-                listResults.addAll(myViewModel.SEARCHED_EVENTS_MEETUP)
+            val eventsRef = firestore.collection("events")
+            listResults.clear()
+            eventsRef.get().addOnSuccessListener {
+                for(document in it.documents){
+                    val arrayName = document.get("name") as String
+                    if(arrayName == input){
+                        listResults.add(document)
+                    }
+                    else{
+                        val arrayNameSplit = arrayName.split(" ")
+                        val lowerCaseArrayName = ArrayList<String>()
+                        for(name in arrayNameSplit) {
+                            lowerCaseArrayName.add(name.lowercase())
+                        }
+                        for(name in lowerCaseArrayName){
+                            for(name_input in inputParsedLower){
+                                if(name == name_input){
+                                    listResults.add(document)
+                                }
+                            }
+                        }
+                    }
+                }
+                arrayAdapter.replace(listResults)
+                arrayAdapter.notifyDataSetChanged()
             }
             arrayAdapter.notifyDataSetChanged()
         }

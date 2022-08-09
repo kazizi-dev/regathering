@@ -2,16 +2,22 @@ package com.cmpt362.regathering.activity
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.cmpt362.regathering.R
 import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
 import com.cmpt362.regathering.model.Event
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -19,36 +25,40 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
         "Come join us for our weekly meeting!", "CSIL Lab Room 2074")
 
     private lateinit var list_view: ListView
-    private lateinit var buttonSave : Button
+    private lateinit var buttonJoin : Button
     private lateinit var buttonCancel : Button
+    private lateinit var imageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
 
         findViewById<Button>(R.id.change_button).visibility = View.GONE
-
+        val arrayList = ArrayList<String>()
+        val id = intent.getStringExtra("id")
+        val fireStore = Firebase.firestore
         list_view = findViewById(R.id.list_view_manual_entry)
-
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, OPTIONS)
-        list_view.adapter = arrayAdapter
-
-        buttonSave = findViewById(R.id.button_save_manual_entry)
+        imageView = findViewById(R.id.event_image)
+        fireStore.collection("events").document(id!!).get().addOnSuccessListener {
+            if((it.get("image") as String).isNotEmpty()){
+                imageView.setImageBitmap(stringToBitMap(it.get("image") as String))
+            }
+            arrayList.add(it.get("date") as String)
+            arrayList.add(it.get("name") as String)
+            arrayList.add(it.get("description") as String)
+            arrayList.add(it.get("location") as String)
+            val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList)
+            list_view.adapter = arrayAdapter
+        }
+        buttonJoin = findViewById(R.id.button_save_manual_entry)
         buttonCancel = findViewById(R.id.button_cancel_manual_entry)
 
-        buttonSave.text = "Join"
+        buttonJoin.text = "Join"
 
-        buttonSave.setOnClickListener(){
-            val db = Firebase.firestore
-            val newEvent = Event()
-            newEvent.name = OPTIONS[1]
-            newEvent.date = OPTIONS[0]
-            newEvent.description = OPTIONS[2]
-            newEvent.location = OPTIONS[3]
-            db.collection("events").document(UUID.randomUUID().toString()).set(newEvent).addOnSuccessListener {
-              it -> println("New event created with the name: ${newEvent.name}")
-            }
-
+        buttonJoin.setOnClickListener(){
+            val user = FirebaseAuth.getInstance().currentUser
+            println("debug: user ${user?.uid}")
+            fireStore.collection("users").document(user?.uid!!).update("joinedEvents", FieldValue.arrayUnion(id))
             finish()
         }
         buttonCancel.setOnClickListener(){
@@ -68,5 +78,15 @@ class ViewEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
 
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
         return
+    }
+    private fun stringToBitMap(encodedString: String?): Bitmap? {
+        return try {
+            val encodeByte =
+                Base64.decode(encodedString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.message
+            null
+        }
     }
 }

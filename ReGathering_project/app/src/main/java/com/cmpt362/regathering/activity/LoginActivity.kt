@@ -43,6 +43,7 @@ class LoginActivity: AppCompatActivity() {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
                     startActivity(Intent(this, StartActivity::class.java))
+
                 }
                 else {
                     Toast.makeText(this,
@@ -58,6 +59,7 @@ class LoginActivity: AppCompatActivity() {
 
         if(firebaseAuth.currentUser != null){
             startActivity(Intent(this, StartActivity::class.java))
+
         }
     }
 

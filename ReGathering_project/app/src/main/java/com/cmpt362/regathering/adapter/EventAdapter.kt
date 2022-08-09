@@ -1,13 +1,18 @@
 package com.cmpt362.regathering.adapter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.cmpt362.regathering.activity.ViewEventActivity
 import com.cmpt362.regathering.model.Event
 import com.cmpt362.regathering.databinding.ItemEventBinding
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import java.io.File.separator
 
 open class EventAdapter(query: Query, private val listener: OnEventSelectedListener) :
     FirestoreAdapter<EventAdapter.ViewHolder>(query) {
@@ -40,11 +45,24 @@ open class EventAdapter(query: Query, private val listener: OnEventSelectedListe
             binding.eventItemName.text = event.name
             binding.eventItemAddress.text = event.location
             binding.eventItemDate.text = event.date
-
+            if(event.image.isNotEmpty()){
+                binding.imageEventShow.setImageBitmap(stringToBitMap(event.image))
+            }
             // Click listener
             binding.root.setOnClickListener {
                 listener?.onEventSelected(snapshot)
             }
         }
+        private fun stringToBitMap(encodedString: String?): Bitmap? {
+            return try {
+                val encodeByte =
+                    Base64.decode(encodedString, Base64.DEFAULT)
+                BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            } catch (e: Exception) {
+                e.message
+                null
+            }
+        }
     }
+
 }
