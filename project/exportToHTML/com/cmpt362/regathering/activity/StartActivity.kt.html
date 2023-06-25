@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>StartActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7f0055; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #3f5fbf;}
+.s3 { color: #2a00ff;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+StartActivity.kt</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.cmpt362.regathering.activity
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a>import android.os.Bundle
+<a name="l4"><span class="ln">4    </span></a>import androidx.appcompat.app.AppCompatActivity
+<a name="l5"><span class="ln">5    </span></a>import androidx.fragment.app.Fragment
+<a name="l6"><span class="ln">6    </span></a>import androidx.viewpager2.widget.ViewPager2
+<a name="l7"><span class="ln">7    </span></a>import com.cmpt362.regathering.R
+<a name="l8"><span class="ln">8    </span></a>import com.cmpt362.regathering.fragment.FragmentEventsSearch
+<a name="l9"><span class="ln">9    </span></a>import com.cmpt362.regathering.fragment.FragmentHome
+<a name="l10"><span class="ln">10   </span></a>import com.cmpt362.regathering.fragment.FragmentNotifications
+<a name="l11"><span class="ln">11   </span></a>import com.cmpt362.regathering.fragment.FragmentSettings
+<a name="l12"><span class="ln">12   </span></a>import com.google.android.material.tabs.TabLayout
+<a name="l13"><span class="ln">13   </span></a>import com.google.android.material.tabs.TabLayoutMediator
+<a name="l14"><span class="ln">14   </span></a>
+<a name="l15"><span class="ln">15   </span></a><span class="s2">/**</span>
+<a name="l16"><span class="ln">16   </span></a> <span class="s2">* StartActivity which is the launcher activity.</span>
+<a name="l17"><span class="ln">17   </span></a> <span class="s2">* Used to show and store the fragments in the navigation tab</span>
+<a name="l18"><span class="ln">18   </span></a> <span class="s2">*/</span>
+<a name="l19"><span class="ln">19   </span></a><span class="s0">class </span>StartActivity : AppCompatActivity() {
+<a name="l20"><span class="ln">20   </span></a>    private lateinit <span class="s0">var </span>fragmentHome: FragmentHome
+<a name="l21"><span class="ln">21   </span></a>    private lateinit <span class="s0">var </span>fragmentEventsSearch: FragmentEventsSearch
+<a name="l22"><span class="ln">22   </span></a>    private lateinit <span class="s0">var </span>fragmentSettings: FragmentSettings
+<a name="l23"><span class="ln">23   </span></a>    private lateinit <span class="s0">var </span>fragmentNotifications: FragmentNotifications
+<a name="l24"><span class="ln">24   </span></a>    private lateinit <span class="s0">var </span>fragments: ArrayList&lt;Fragment&gt;
+<a name="l25"><span class="ln">25   </span></a>    private lateinit <span class="s0">var </span>tab: TabLayout
+<a name="l26"><span class="ln">26   </span></a>    private lateinit <span class="s0">var </span>viewPager: ViewPager2
+<a name="l27"><span class="ln">27   </span></a>    private lateinit <span class="s0">var </span>myFragmentStateAdapter: StartActivityFragmentStateAdapter
+<a name="l28"><span class="ln">28   </span></a>    private lateinit <span class="s0">var </span>tabLayoutMediator: TabLayoutMediator
+<a name="l29"><span class="ln">29   </span></a>    private lateinit <span class="s0">var </span>tabConfigurationStrategy: TabLayoutMediator.TabConfigurationStrategy
+<a name="l30"><span class="ln">30   </span></a>    private <span class="s0">val </span>TAB_TEXT = arrayOf(<span class="s3">&quot;home&quot;</span>, <span class="s3">&quot;events&quot;</span>, <span class="s3">&quot;notifications&quot;</span>, <span class="s3">&quot;settings&quot;</span>)
+<a name="l31"><span class="ln">31   </span></a>
+<a name="l32"><span class="ln">32   </span></a>    override <span class="s0">fun </span>onCreate(savedInstanceState: Bundle?) {
+<a name="l33"><span class="ln">33   </span></a>        <span class="s0">super</span>.onCreate(savedInstanceState)
+<a name="l34"><span class="ln">34   </span></a>        setContentView(R.layout.activity_start)
+<a name="l35"><span class="ln">35   </span></a>
+<a name="l36"><span class="ln">36   </span></a>        fragmentHome = FragmentHome()
+<a name="l37"><span class="ln">37   </span></a>        fragmentEventsSearch = FragmentEventsSearch()
+<a name="l38"><span class="ln">38   </span></a>        fragmentSettings = FragmentSettings()
+<a name="l39"><span class="ln">39   </span></a>        fragmentNotifications = FragmentNotifications()
+<a name="l40"><span class="ln">40   </span></a>
+<a name="l41"><span class="ln">41   </span></a>        fragments = ArrayList()
+<a name="l42"><span class="ln">42   </span></a>        fragments.add(fragmentHome)
+<a name="l43"><span class="ln">43   </span></a>        fragments.add(fragmentEventsSearch)
+<a name="l44"><span class="ln">44   </span></a>        fragments.add(fragmentNotifications)
+<a name="l45"><span class="ln">45   </span></a>        fragments.add(fragmentSettings)
+<a name="l46"><span class="ln">46   </span></a>
+<a name="l47"><span class="ln">47   </span></a>        tab = findViewById(R.id.tab)
+<a name="l48"><span class="ln">48   </span></a>        viewPager = findViewById(R.id.viewpager)
+<a name="l49"><span class="ln">49   </span></a>        myFragmentStateAdapter = StartActivityFragmentStateAdapter(<span class="s0">this</span>, fragments)
+<a name="l50"><span class="ln">50   </span></a>        viewPager.adapter = myFragmentStateAdapter
+<a name="l51"><span class="ln">51   </span></a>
+<a name="l52"><span class="ln">52   </span></a>        tabConfigurationStrategy = TabLayoutMediator.TabConfigurationStrategy(){
+<a name="l53"><span class="ln">53   </span></a>            tab: TabLayout.Tab, position: Int -&gt;
+<a name="l54"><span class="ln">54   </span></a>            tab.text = TAB_TEXT[position]
+<a name="l55"><span class="ln">55   </span></a>        }
+<a name="l56"><span class="ln">56   </span></a>        tabLayoutMediator = TabLayoutMediator(tab, viewPager, tabConfigurationStrategy)
+<a name="l57"><span class="ln">57   </span></a>        tabLayoutMediator.attach()
+<a name="l58"><span class="ln">58   </span></a>    }
+<a name="l59"><span class="ln">59   </span></a>}</pre>
+</body>
+</html>

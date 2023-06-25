@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>FragmentNotifications.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7f0055; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #3f5fbf;}
+.s3 { color: #2a00ff;}
+.s4 { color: #000080; font-weight: bold;}
+.s5 { color: #3f7f5f;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FragmentNotifications.kt</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.cmpt362.regathering.fragment
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a>import android.content.Intent
+<a name="l4"><span class="ln">4    </span></a>import android.os.Bundle
+<a name="l5"><span class="ln">5    </span></a>import android.util.Log
+<a name="l6"><span class="ln">6    </span></a>import androidx.fragment.app.Fragment
+<a name="l7"><span class="ln">7    </span></a>import android.view.LayoutInflater
+<a name="l8"><span class="ln">8    </span></a>import android.view.View
+<a name="l9"><span class="ln">9    </span></a>import android.view.ViewGroup
+<a name="l10"><span class="ln">10   </span></a>import android.widget.AdapterView
+<a name="l11"><span class="ln">11   </span></a>import android.widget.ArrayAdapter
+<a name="l12"><span class="ln">12   </span></a>import android.widget.ListView
+<a name="l13"><span class="ln">13   </span></a>import com.cmpt362.regathering.R
+<a name="l14"><span class="ln">14   </span></a>import com.cmpt362.regathering.activity.ViewEventActivity
+<a name="l15"><span class="ln">15   </span></a>import com.cmpt362.regathering.model.Event
+<a name="l16"><span class="ln">16   </span></a>import com.google.firebase.auth.FirebaseAuth
+<a name="l17"><span class="ln">17   </span></a>import com.google.firebase.firestore.DocumentSnapshot
+<a name="l18"><span class="ln">18   </span></a>import com.google.firebase.firestore.FirebaseFirestore
+<a name="l19"><span class="ln">19   </span></a>import org.w3c.dom.Document
+<a name="l20"><span class="ln">20   </span></a>
+<a name="l21"><span class="ln">21   </span></a>
+<a name="l22"><span class="ln">22   </span></a><span class="s2">/**</span>
+<a name="l23"><span class="ln">23   </span></a> <span class="s2">* A simple [Fragment] subclass.</span>
+<a name="l24"><span class="ln">24   </span></a> <span class="s2">* Use the [FragmentNotifications.newInstance] factory method to</span>
+<a name="l25"><span class="ln">25   </span></a> <span class="s2">* create an instance of this fragment.</span>
+<a name="l26"><span class="ln">26   </span></a> <span class="s2">*/</span>
+<a name="l27"><span class="ln">27   </span></a><span class="s0">class </span>FragmentNotifications : Fragment() {
+<a name="l28"><span class="ln">28   </span></a>    private <span class="s0">val </span>MESSAGE_VARIETY = arrayOf(<span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">You got matched with this new event! (click)</span><span class="s4">\n</span><span class="s3">&quot;</span>,
+<a name="l29"><span class="ln">29   </span></a>                                                <span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">New event near you! (click)</span><span class="s4">\n</span><span class="s3">&quot;</span>,
+<a name="l30"><span class="ln">30   </span></a>                                                <span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">We think this event might be right for you! (click)</span><span class="s4">\n</span><span class="s3">&quot;</span>)
+<a name="l31"><span class="ln">31   </span></a>    private lateinit <span class="s0">var </span>listViewNotifications: ListView
+<a name="l32"><span class="ln">32   </span></a>    private lateinit <span class="s0">var </span>listNotifications: ArrayList&lt;String&gt;
+<a name="l33"><span class="ln">33   </span></a>
+<a name="l34"><span class="ln">34   </span></a>    private lateinit <span class="s0">var </span>firestore: FirebaseFirestore
+<a name="l35"><span class="ln">35   </span></a>    private lateinit <span class="s0">var </span>suggestedEvents: ArrayList&lt;String&gt;
+<a name="l36"><span class="ln">36   </span></a>
+<a name="l37"><span class="ln">37   </span></a>    private lateinit <span class="s0">var </span>arrayAdapter: ArrayAdapter&lt;*&gt;
+<a name="l38"><span class="ln">38   </span></a>
+<a name="l39"><span class="ln">39   </span></a>
+<a name="l40"><span class="ln">40   </span></a>    override <span class="s0">fun </span>onCreateView(
+<a name="l41"><span class="ln">41   </span></a>        inflater: LayoutInflater, container: ViewGroup?,
+<a name="l42"><span class="ln">42   </span></a>        savedInstanceState: Bundle?
+<a name="l43"><span class="ln">43   </span></a>    ): View? {
+<a name="l44"><span class="ln">44   </span></a>        <span class="s5">// Inflate the layout for this fragment</span>
+<a name="l45"><span class="ln">45   </span></a>        <span class="s0">val </span>view = inflater.inflate(R.layout.fragment_notifications, container, <span class="s0">false</span>)
+<a name="l46"><span class="ln">46   </span></a>
+<a name="l47"><span class="ln">47   </span></a>        <span class="s5">// initialize firestore</span>
+<a name="l48"><span class="ln">48   </span></a>        firestore = FirebaseFirestore.getInstance()
+<a name="l49"><span class="ln">49   </span></a>
+<a name="l50"><span class="ln">50   </span></a>        <span class="s5">// suggested events for the user based on interest</span>
+<a name="l51"><span class="ln">51   </span></a>        suggestedEvents = ArrayList()
+<a name="l52"><span class="ln">52   </span></a>
+<a name="l53"><span class="ln">53   </span></a>        listViewNotifications = view.findViewById(R.id.list_view_notifications)
+<a name="l54"><span class="ln">54   </span></a>        listNotifications = ArrayList()
+<a name="l55"><span class="ln">55   </span></a>        arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, listNotifications)
+<a name="l56"><span class="ln">56   </span></a>
+<a name="l57"><span class="ln">57   </span></a>
+<a name="l58"><span class="ln">58   </span></a>        listViewNotifications.adapter = arrayAdapter
+<a name="l59"><span class="ln">59   </span></a>
+<a name="l60"><span class="ln">60   </span></a>        firestore.collection(<span class="s3">&quot;users&quot;</span>).document(FirebaseAuth.getInstance().uid.toString())
+<a name="l61"><span class="ln">61   </span></a>            .get().addOnSuccessListener { usersIt -&gt;
+<a name="l62"><span class="ln">62   </span></a>
+<a name="l63"><span class="ln">63   </span></a>            <span class="s0">var </span>interests = usersIt.get(<span class="s3">&quot;interests&quot;</span>) <span class="s0">as </span>ArrayList&lt;String&gt;
+<a name="l64"><span class="ln">64   </span></a>            <span class="s0">val </span>hostedEventsByUser = usersIt.get(<span class="s3">&quot;hostedEvents&quot;</span>) <span class="s0">as </span>ArrayList&lt;String&gt;
+<a name="l65"><span class="ln">65   </span></a>
+<a name="l66"><span class="ln">66   </span></a>            firestore.collection(<span class="s3">&quot;events&quot;</span>).whereEqualTo(<span class="s3">&quot;name&quot;</span>, interests[0]).get().addOnSuccessListener { eventsIt -&gt;
+<a name="l67"><span class="ln">67   </span></a>                <span class="s0">for</span>(event <span class="s0">in </span>eventsIt){
+<a name="l68"><span class="ln">68   </span></a>                    <span class="s0">if</span>(!hostedEventsByUser.contains(event.id)){
+<a name="l69"><span class="ln">69   </span></a>                        listNotifications.add(<span class="s3">&quot;New event match: &quot; </span>+ event.get(<span class="s3">&quot;name&quot;</span>).toString())
+<a name="l70"><span class="ln">70   </span></a>                        arrayAdapter.notifyDataSetChanged()
+<a name="l71"><span class="ln">71   </span></a>
+<a name="l72"><span class="ln">72   </span></a>
+<a name="l73"><span class="ln">73   </span></a>                        <span class="s0">val </span>suggestedEvents: ArrayList&lt;String&gt; = usersIt.get(<span class="s3">&quot;suggestedEvents&quot;</span>) <span class="s0">as </span>ArrayList&lt;String&gt;
+<a name="l74"><span class="ln">74   </span></a>                        suggestedEvents.add(event.id)
+<a name="l75"><span class="ln">75   </span></a>
+<a name="l76"><span class="ln">76   </span></a>                        <span class="s5">// update suggest events</span>
+<a name="l77"><span class="ln">77   </span></a>                        firestore.collection(<span class="s3">&quot;users&quot;</span>)
+<a name="l78"><span class="ln">78   </span></a>                            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+<a name="l79"><span class="ln">79   </span></a>                            .update(<span class="s3">&quot;suggestedEvents&quot;</span>, suggestedEvents)
+<a name="l80"><span class="ln">80   </span></a>                    }
+<a name="l81"><span class="ln">81   </span></a>                }
+<a name="l82"><span class="ln">82   </span></a>
+<a name="l83"><span class="ln">83   </span></a>                arrayAdapter.notifyDataSetChanged()
+<a name="l84"><span class="ln">84   </span></a>            }
+<a name="l85"><span class="ln">85   </span></a>        }
+<a name="l86"><span class="ln">86   </span></a>        arrayAdapter.notifyDataSetChanged()
+<a name="l87"><span class="ln">87   </span></a>
+<a name="l88"><span class="ln">88   </span></a>
+<a name="l89"><span class="ln">89   </span></a><span class="s5">//        listViewNotifications.setOnItemClickListener() { parent: AdapterView&lt;*&gt;, textView: View, position: Int, id: Long -&gt;</span>
+<a name="l90"><span class="ln">90   </span></a><span class="s5">//            val activityIntent = Intent(requireActivity(), ViewEventActivity::class.java)</span>
+<a name="l91"><span class="ln">91   </span></a><span class="s5">//            activityIntent.putExtra(&quot;id&quot;, arrayAdapter.getItem(position).toString())</span>
+<a name="l92"><span class="ln">92   </span></a><span class="s5">//            startActivity(activityIntent)</span>
+<a name="l93"><span class="ln">93   </span></a><span class="s5">//        }</span>
+<a name="l94"><span class="ln">94   </span></a>
+<a name="l95"><span class="ln">95   </span></a>        <span class="s0">return </span>view
+<a name="l96"><span class="ln">96   </span></a>    }
+<a name="l97"><span class="ln">97   </span></a>
+<a name="l98"><span class="ln">98   </span></a>    override <span class="s0">fun </span>onStart() {
+<a name="l99"><span class="ln">99   </span></a>        <span class="s0">super</span>.onStart()
+<a name="l100"><span class="ln">100  </span></a>
+<a name="l101"><span class="ln">101  </span></a>        <span class="s0">if</span>(::arrayAdapter.isInitialized){
+<a name="l102"><span class="ln">102  </span></a>            arrayAdapter.notifyDataSetChanged()
+<a name="l103"><span class="ln">103  </span></a>        }
+<a name="l104"><span class="ln">104  </span></a>    }
+<a name="l105"><span class="ln">105  </span></a>
+<a name="l106"><span class="ln">106  </span></a>    override <span class="s0">fun </span>onStop() {
+<a name="l107"><span class="ln">107  </span></a>        <span class="s0">super</span>.onStop()
+<a name="l108"><span class="ln">108  </span></a>
+<a name="l109"><span class="ln">109  </span></a>        <span class="s0">if</span>(::arrayAdapter.isInitialized){
+<a name="l110"><span class="ln">110  </span></a>            arrayAdapter.notifyDataSetChanged()
+<a name="l111"><span class="ln">111  </span></a>        }
+<a name="l112"><span class="ln">112  </span></a>    }
+<a name="l113"><span class="ln">113  </span></a>}</pre>
+</body>
+</html>

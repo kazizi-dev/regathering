@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>FragmentSettings.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7f0055; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #3f5fbf;}
+.s3 { color: #2a00ff;}
+.s4 { color: #3f7f5f;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FragmentSettings.kt</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.cmpt362.regathering.fragment
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a>import android.app.AlertDialog
+<a name="l4"><span class="ln">4    </span></a>import android.content.Intent
+<a name="l5"><span class="ln">5    </span></a>import android.os.Bundle
+<a name="l6"><span class="ln">6    </span></a>import android.text.InputType
+<a name="l7"><span class="ln">7    </span></a>import android.widget.EditText
+<a name="l8"><span class="ln">8    </span></a>import androidx.preference.EditTextPreference
+<a name="l9"><span class="ln">9    </span></a>import androidx.preference.Preference
+<a name="l10"><span class="ln">10   </span></a>import androidx.preference.PreferenceFragmentCompat
+<a name="l11"><span class="ln">11   </span></a>import com.cmpt362.regathering.R
+<a name="l12"><span class="ln">12   </span></a>import com.cmpt362.regathering.activity.LoginActivity
+<a name="l13"><span class="ln">13   </span></a>import com.cmpt362.regathering.activity.ProfileActivity
+<a name="l14"><span class="ln">14   </span></a>import com.cmpt362.regathering.model.User
+<a name="l15"><span class="ln">15   </span></a>import com.google.firebase.auth.FirebaseAuth
+<a name="l16"><span class="ln">16   </span></a>import com.google.firebase.firestore.FirebaseFirestore
+<a name="l17"><span class="ln">17   </span></a>import com.google.firebase.firestore.Query
+<a name="l18"><span class="ln">18   </span></a>import com.google.firebase.firestore.ktx.firestore
+<a name="l19"><span class="ln">19   </span></a>import com.google.firebase.firestore.ktx.toObject
+<a name="l20"><span class="ln">20   </span></a>import com.google.firebase.firestore.FieldValue
+<a name="l21"><span class="ln">21   </span></a>import com.google.firebase.firestore.ktx.firestore
+<a name="l22"><span class="ln">22   </span></a>import com.google.firebase.ktx.Firebase
+<a name="l23"><span class="ln">23   </span></a>
+<a name="l24"><span class="ln">24   </span></a><span class="s2">/**</span>
+<a name="l25"><span class="ln">25   </span></a> <span class="s2">* FragmentSettings class that extends PreferenceFragmentCompat class</span>
+<a name="l26"><span class="ln">26   </span></a> <span class="s2">* used to beautifully display settings tab when user chooses</span>
+<a name="l27"><span class="ln">27   </span></a> <span class="s2">* to open Settings tab in the navigation bar</span>
+<a name="l28"><span class="ln">28   </span></a> <span class="s2">*/</span>
+<a name="l29"><span class="ln">29   </span></a><span class="s0">class </span>FragmentSettings: PreferenceFragmentCompat() {
+<a name="l30"><span class="ln">30   </span></a>    private <span class="s0">val </span>firebaseAuth = FirebaseAuth.getInstance()
+<a name="l31"><span class="ln">31   </span></a>    private lateinit <span class="s0">var </span>firestore: FirebaseFirestore
+<a name="l32"><span class="ln">32   </span></a>    private lateinit <span class="s0">var </span>eventsQuery: Query
+<a name="l33"><span class="ln">33   </span></a>
+<a name="l34"><span class="ln">34   </span></a>
+<a name="l35"><span class="ln">35   </span></a>    override <span class="s0">fun </span>onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+<a name="l36"><span class="ln">36   </span></a>        setPreferencesFromResource(R.xml.preferences, rootKey)
+<a name="l37"><span class="ln">37   </span></a>
+<a name="l38"><span class="ln">38   </span></a>        firestore = Firebase.firestore
+<a name="l39"><span class="ln">39   </span></a>    }
+<a name="l40"><span class="ln">40   </span></a>
+<a name="l41"><span class="ln">41   </span></a>    <span class="s2">/**</span>
+<a name="l42"><span class="ln">42   </span></a>     <span class="s2">* Method triggered when user clicks any setting on the settings fragment</span>
+<a name="l43"><span class="ln">43   </span></a>     <span class="s2">*/</span>
+<a name="l44"><span class="ln">44   </span></a>    override <span class="s0">fun </span>onPreferenceTreeClick(preference: Preference): Boolean {
+<a name="l45"><span class="ln">45   </span></a>        <span class="s0">val </span>key = preference.key
+<a name="l46"><span class="ln">46   </span></a>        <span class="s0">if</span>(key == <span class="s3">&quot;settings_profile&quot;</span>){
+<a name="l47"><span class="ln">47   </span></a>            <span class="s0">val </span>intent = Intent(requireActivity(), ProfileActivity::<span class="s0">class</span>.java)
+<a name="l48"><span class="ln">48   </span></a>            startActivity(intent)
+<a name="l49"><span class="ln">49   </span></a>        }
+<a name="l50"><span class="ln">50   </span></a>        <span class="s0">else if</span>(key == <span class="s3">&quot;interests_preference&quot;</span>){
+<a name="l51"><span class="ln">51   </span></a>            <span class="s0">val </span>builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+<a name="l52"><span class="ln">52   </span></a>            builder.setTitle(<span class="s3">&quot;Interests&quot;</span>)
+<a name="l53"><span class="ln">53   </span></a>
+<a name="l54"><span class="ln">54   </span></a>            <span class="s0">val </span>input = EditText(requireContext())
+<a name="l55"><span class="ln">55   </span></a>            input.inputType = InputType.TYPE_CLASS_TEXT
+<a name="l56"><span class="ln">56   </span></a>
+<a name="l57"><span class="ln">57   </span></a>            <span class="s0">val </span>userId: String = firebaseAuth.currentUser?.uid.toString()
+<a name="l58"><span class="ln">58   </span></a>            <span class="s0">var </span>userInterests: ArrayList&lt;String&gt;
+<a name="l59"><span class="ln">59   </span></a>
+<a name="l60"><span class="ln">60   </span></a>            <span class="s4">// read user interests from database</span>
+<a name="l61"><span class="ln">61   </span></a>            firestore.collection(<span class="s3">&quot;users&quot;</span>).document(userId).get().addOnSuccessListener {
+<a name="l62"><span class="ln">62   </span></a>                <span class="s0">val </span>user = it.toObject&lt;User&gt;()!!
+<a name="l63"><span class="ln">63   </span></a>                userInterests = user.interests
+<a name="l64"><span class="ln">64   </span></a>                <span class="s0">for</span>(i <span class="s0">in </span>0 until userInterests.size){
+<a name="l65"><span class="ln">65   </span></a>                    <span class="s0">if</span>(i == 0){
+<a name="l66"><span class="ln">66   </span></a>                        input.setText(userInterests[0])
+<a name="l67"><span class="ln">67   </span></a>                    }
+<a name="l68"><span class="ln">68   </span></a>                    <span class="s0">else</span>{
+<a name="l69"><span class="ln">69   </span></a>                        <span class="s0">val </span>interests = input.text.toString() + <span class="s3">&quot;,&quot; </span>+ userInterests[i]
+<a name="l70"><span class="ln">70   </span></a>                        input.setText(interests)
+<a name="l71"><span class="ln">71   </span></a>                    }
+<a name="l72"><span class="ln">72   </span></a>                }
+<a name="l73"><span class="ln">73   </span></a>            }
+<a name="l74"><span class="ln">74   </span></a>
+<a name="l75"><span class="ln">75   </span></a>            <span class="s4">// update dialog view with user input</span>
+<a name="l76"><span class="ln">76   </span></a>            builder.setView(input)
+<a name="l77"><span class="ln">77   </span></a>
+<a name="l78"><span class="ln">78   </span></a>            <span class="s4">// save updated interests</span>
+<a name="l79"><span class="ln">79   </span></a>            builder.setPositiveButton(<span class="s3">&quot;save&quot;</span>) { dialog, which -&gt;
+<a name="l80"><span class="ln">80   </span></a>                userInterests = ArrayList&lt;String&gt;()
+<a name="l81"><span class="ln">81   </span></a>                userInterests.addAll(input.text.split(<span class="s3">&quot;,&quot;</span>))
+<a name="l82"><span class="ln">82   </span></a>
+<a name="l83"><span class="ln">83   </span></a>                <span class="s4">// save interests in the database</span>
+<a name="l84"><span class="ln">84   </span></a>                firestore.collection(<span class="s3">&quot;users&quot;</span>).document(userId)
+<a name="l85"><span class="ln">85   </span></a>                    .update(<span class="s3">&quot;interests&quot;</span>, userInterests)
+<a name="l86"><span class="ln">86   </span></a>            }
+<a name="l87"><span class="ln">87   </span></a>            builder.setNegativeButton(<span class="s3">&quot;cancel&quot;</span>){dialog, which -&gt; }
+<a name="l88"><span class="ln">88   </span></a>            builder.show()
+<a name="l89"><span class="ln">89   </span></a>        }
+<a name="l90"><span class="ln">90   </span></a>        <span class="s0">else if</span>(key == <span class="s3">&quot;user_logout&quot;</span>){
+<a name="l91"><span class="ln">91   </span></a>            firebaseAuth.signOut()
+<a name="l92"><span class="ln">92   </span></a>            startActivity(Intent(requireActivity(), LoginActivity::<span class="s0">class</span>.java))
+<a name="l93"><span class="ln">93   </span></a>        }
+<a name="l94"><span class="ln">94   </span></a><span class="s4">//        else if(key == &quot;interests_preference&quot;){</span>
+<a name="l95"><span class="ln">95   </span></a><span class="s4">//            firestore.collection(&quot;users&quot;).document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {</span>
+<a name="l96"><span class="ln">96   </span></a><span class="s4">//                val stringToShow = (it.get(&quot;interests&quot;) as ArrayList&lt;*&gt;).joinToString(separator = &quot;, &quot;)</span>
+<a name="l97"><span class="ln">97   </span></a><span class="s4">//                //preference.title = stringToShow</span>
+<a name="l98"><span class="ln">98   </span></a><span class="s4">//                //(preference as EditTextPreference).text = stringToShow</span>
+<a name="l99"><span class="ln">99   </span></a><span class="s4">//                (preference as EditTextPreference).dialogMessage = stringToShow</span>
+<a name="l100"><span class="ln">100  </span></a><span class="s4">//            }</span>
+<a name="l101"><span class="ln">101  </span></a><span class="s4">//            preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener{preferenceHere, newValue -&gt;</span>
+<a name="l102"><span class="ln">102  </span></a><span class="s4">//                val newString = newValue as String</span>
+<a name="l103"><span class="ln">103  </span></a><span class="s4">//                val newSplitArray = newString.split(&quot;, &quot;)</span>
+<a name="l104"><span class="ln">104  </span></a><span class="s4">//                firestore.collection(&quot;users&quot;).document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {</span>
+<a name="l105"><span class="ln">105  </span></a><span class="s4">//                    for(word in newSplitArray){</span>
+<a name="l106"><span class="ln">106  </span></a><span class="s4">//                        if(word.isNotEmpty()){</span>
+<a name="l107"><span class="ln">107  </span></a><span class="s4">//                            it.reference.update(&quot;interests&quot;, FieldValue.arrayUnion(word))</span>
+<a name="l108"><span class="ln">108  </span></a><span class="s4">//                        }</span>
+<a name="l109"><span class="ln">109  </span></a><span class="s4">//                    }</span>
+<a name="l110"><span class="ln">110  </span></a><span class="s4">//                }</span>
+<a name="l111"><span class="ln">111  </span></a><span class="s4">//                true</span>
+<a name="l112"><span class="ln">112  </span></a><span class="s4">//            }</span>
+<a name="l113"><span class="ln">113  </span></a><span class="s4">//        }</span>
+<a name="l114"><span class="ln">114  </span></a>        <span class="s0">return true</span>
+<a name="l115"><span class="ln">115  </span></a>    }
+<a name="l116"><span class="ln">116  </span></a>}</pre>
+</body>
+</html>

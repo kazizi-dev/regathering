@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>ProfileActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7f0055; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #3f5fbf;}
+.s3 { color: #2a00ff;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ProfileActivity.kt</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.cmpt362.regathering.activity
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a>
+<a name="l4"><span class="ln">4    </span></a>import android.content.Context
+<a name="l5"><span class="ln">5    </span></a>import android.graphics.Bitmap
+<a name="l6"><span class="ln">6    </span></a>import android.graphics.BitmapFactory
+<a name="l7"><span class="ln">7    </span></a>import android.graphics.drawable.BitmapDrawable
+<a name="l8"><span class="ln">8    </span></a>import android.os.Bundle
+<a name="l9"><span class="ln">9    </span></a>import android.util.Base64
+<a name="l10"><span class="ln">10   </span></a>import android.view.Menu
+<a name="l11"><span class="ln">11   </span></a>import android.view.View
+<a name="l12"><span class="ln">12   </span></a>import android.widget.EditText
+<a name="l13"><span class="ln">13   </span></a>import android.widget.ImageView
+<a name="l14"><span class="ln">14   </span></a>import android.widget.RadioButton
+<a name="l15"><span class="ln">15   </span></a>import android.widget.Toast
+<a name="l16"><span class="ln">16   </span></a>import androidx.appcompat.app.AppCompatActivity
+<a name="l17"><span class="ln">17   </span></a>import androidx.lifecycle.ViewModelProvider
+<a name="l18"><span class="ln">18   </span></a>import com.cmpt362.regathering.R
+<a name="l19"><span class="ln">19   </span></a>import com.cmpt362.regathering.Util
+<a name="l20"><span class="ln">20   </span></a>import com.cmpt362.regathering.fragment.ProfilePictureDialogFragment
+<a name="l21"><span class="ln">21   </span></a>import com.cmpt362.regathering.viewmodel.MyViewModel
+<a name="l22"><span class="ln">22   </span></a>import java.io.ByteArrayOutputStream
+<a name="l23"><span class="ln">23   </span></a>
+<a name="l24"><span class="ln">24   </span></a><span class="s2">/**</span>
+<a name="l25"><span class="ln">25   </span></a> <span class="s2">* ProfileActivity used to store users profile</span>
+<a name="l26"><span class="ln">26   </span></a> <span class="s2">* where user can set his profile image and profile preferences</span>
+<a name="l27"><span class="ln">27   </span></a> <span class="s2">*/</span>
+<a name="l28"><span class="ln">28   </span></a><span class="s0">class </span>ProfileActivity : AppCompatActivity() {
+<a name="l29"><span class="ln">29   </span></a>    private lateinit <span class="s0">var </span>imageView: ImageView
+<a name="l30"><span class="ln">30   </span></a>    companion <span class="s0">object</span>{
+<a name="l31"><span class="ln">31   </span></a>        lateinit <span class="s0">var </span>myViewModel: MyViewModel
+<a name="l32"><span class="ln">32   </span></a>    }
+<a name="l33"><span class="ln">33   </span></a>    override <span class="s0">fun </span>onCreate(savedInstanceState: Bundle?) {
+<a name="l34"><span class="ln">34   </span></a>        <span class="s0">super</span>.onCreate(savedInstanceState)
+<a name="l35"><span class="ln">35   </span></a>        setContentView(R.layout.activity_profile)
+<a name="l36"><span class="ln">36   </span></a>        Util.checkPermissions(<span class="s0">this</span>)
+<a name="l37"><span class="ln">37   </span></a>        imageView = findViewById(R.id.profile_image_view)
+<a name="l38"><span class="ln">38   </span></a>
+<a name="l39"><span class="ln">39   </span></a>        myViewModel = ViewModelProvider(<span class="s0">this</span>).get(MyViewModel::<span class="s0">class</span>.java)
+<a name="l40"><span class="ln">40   </span></a>        myViewModel.userImage.observe(<span class="s0">this</span>) { it -&gt;
+<a name="l41"><span class="ln">41   </span></a>            imageView.setImageBitmap(it)
+<a name="l42"><span class="ln">42   </span></a>        }
+<a name="l43"><span class="ln">43   </span></a>
+<a name="l44"><span class="ln">44   </span></a>        loadProfile()
+<a name="l45"><span class="ln">45   </span></a>    }
+<a name="l46"><span class="ln">46   </span></a>
+<a name="l47"><span class="ln">47   </span></a>    override <span class="s0">fun </span>onCreateOptionsMenu(menu: Menu?): Boolean {
+<a name="l48"><span class="ln">48   </span></a>        menuInflater.inflate(R.menu.nav_menu, menu)
+<a name="l49"><span class="ln">49   </span></a>        <span class="s0">return true</span>
+<a name="l50"><span class="ln">50   </span></a>    }
+<a name="l51"><span class="ln">51   </span></a>
+<a name="l52"><span class="ln">52   </span></a>    <span class="s0">fun </span>onClickChange(view:View){
+<a name="l53"><span class="ln">53   </span></a>        <span class="s0">val </span>profilePictureDialogFragment = ProfilePictureDialogFragment()
+<a name="l54"><span class="ln">54   </span></a>        profilePictureDialogFragment.show(supportFragmentManager, <span class="s3">&quot;tag&quot;</span>)
+<a name="l55"><span class="ln">55   </span></a>    }
+<a name="l56"><span class="ln">56   </span></a>
+<a name="l57"><span class="ln">57   </span></a>    <span class="s0">fun </span>onClickSave(view:View){
+<a name="l58"><span class="ln">58   </span></a>        saveProfile()
+<a name="l59"><span class="ln">59   </span></a>        onClickCancel(view)
+<a name="l60"><span class="ln">60   </span></a>    }
+<a name="l61"><span class="ln">61   </span></a>
+<a name="l62"><span class="ln">62   </span></a>    <span class="s0">fun </span>onClickCancel(view: View) {
+<a name="l63"><span class="ln">63   </span></a>        finish()
+<a name="l64"><span class="ln">64   </span></a>    }
+<a name="l65"><span class="ln">65   </span></a>
+<a name="l66"><span class="ln">66   </span></a>    private <span class="s0">fun </span>loadProfile(){
+<a name="l67"><span class="ln">67   </span></a>        <span class="s0">val </span>sharedPref = getPreferences(Context.MODE_PRIVATE) ?: <span class="s0">return</span>
+<a name="l68"><span class="ln">68   </span></a>        <span class="s0">val </span>userName = sharedPref.getString(getString(R.string.saved_username), <span class="s3">&quot;&quot;</span>)
+<a name="l69"><span class="ln">69   </span></a>        <span class="s0">val </span>email = sharedPref.getString(getString(R.string.saved_email), <span class="s3">&quot;&quot;</span>)
+<a name="l70"><span class="ln">70   </span></a>        <span class="s0">val </span>phoneNumber = sharedPref.getString(getString(R.string.saved_number), <span class="s3">&quot;&quot;</span>)
+<a name="l71"><span class="ln">71   </span></a>        <span class="s0">val </span>gender = sharedPref.getInt(getString(R.string.saved_gender), 2)
+<a name="l72"><span class="ln">72   </span></a>        <span class="s0">val </span>classYear = sharedPref.getString(getString(R.string.saved_class_year), <span class="s3">&quot;&quot;</span>)
+<a name="l73"><span class="ln">73   </span></a>        <span class="s0">val </span>major = sharedPref.getString(getString(R.string.saved_major), <span class="s3">&quot;&quot;</span>)
+<a name="l74"><span class="ln">74   </span></a>        <span class="s0">val </span>imageString = sharedPref.getString(getString(R.string.saved_image), <span class="s3">&quot;&quot;</span>)
+<a name="l75"><span class="ln">75   </span></a>        findViewById&lt;EditText&gt;(R.id.name_editview).setText(userName)
+<a name="l76"><span class="ln">76   </span></a>        findViewById&lt;EditText&gt;(R.id.email_editview).setText(email)
+<a name="l77"><span class="ln">77   </span></a>        findViewById&lt;EditText&gt;(R.id.phone_editview).setText(phoneNumber)
+<a name="l78"><span class="ln">78   </span></a>        findViewById&lt;EditText&gt;(R.id.class_editview).setText(classYear)
+<a name="l79"><span class="ln">79   </span></a>        findViewById&lt;EditText&gt;(R.id.major_editview).setText(major)
+<a name="l80"><span class="ln">80   </span></a>        <span class="s0">if</span>(gender == 0){
+<a name="l81"><span class="ln">81   </span></a>            findViewById&lt;RadioButton&gt;(R.id.female_radiobutton).isChecked = <span class="s0">true</span>
+<a name="l82"><span class="ln">82   </span></a>        }
+<a name="l83"><span class="ln">83   </span></a>        <span class="s0">else if</span>(gender == 1){
+<a name="l84"><span class="ln">84   </span></a>            findViewById&lt;RadioButton&gt;(R.id.male_radiobutton).isChecked = <span class="s0">true</span>
+<a name="l85"><span class="ln">85   </span></a>        }
+<a name="l86"><span class="ln">86   </span></a>        <span class="s0">if</span>(imageString != <span class="s3">&quot;&quot;</span>){
+<a name="l87"><span class="ln">87   </span></a>            findViewById&lt;ImageView&gt;(R.id.profile_image_view).setImageBitmap(stringToBitMap(imageString))
+<a name="l88"><span class="ln">88   </span></a>        }
+<a name="l89"><span class="ln">89   </span></a>        <span class="s0">else</span>{
+<a name="l90"><span class="ln">90   </span></a>            findViewById&lt;ImageView&gt;(R.id.profile_image_view).setImageResource(R.drawable.dart)
+<a name="l91"><span class="ln">91   </span></a>        }
+<a name="l92"><span class="ln">92   </span></a>
+<a name="l93"><span class="ln">93   </span></a>    }
+<a name="l94"><span class="ln">94   </span></a>
+<a name="l95"><span class="ln">95   </span></a>    private <span class="s0">fun </span>saveProfile(){
+<a name="l96"><span class="ln">96   </span></a>        <span class="s0">val </span>sharedPref = getPreferences(Context.MODE_PRIVATE) ?: <span class="s0">return</span>
+<a name="l97"><span class="ln">97   </span></a>        with (sharedPref.edit()) {
+<a name="l98"><span class="ln">98   </span></a>            putString(getString(R.string.saved_username), findViewById&lt;EditText&gt;(R.id.name_editview).text.toString())
+<a name="l99"><span class="ln">99   </span></a>            putString(getString(R.string.saved_email), findViewById&lt;EditText&gt;(R.id.email_editview).text.toString())
+<a name="l100"><span class="ln">100  </span></a>            putString(getString(R.string.saved_number), findViewById&lt;EditText&gt;(R.id.phone_editview).text.toString())
+<a name="l101"><span class="ln">101  </span></a>            putString(getString(R.string.saved_class_year), findViewById&lt;EditText&gt;(R.id.class_editview).text.toString())
+<a name="l102"><span class="ln">102  </span></a>            putString(getString(R.string.saved_major), findViewById&lt;EditText&gt;(R.id.major_editview).text.toString())
+<a name="l103"><span class="ln">103  </span></a>            <span class="s0">val </span>bm = (findViewById&lt;ImageView&gt;(R.id.profile_image_view).drawable <span class="s0">as </span>BitmapDrawable).bitmap
+<a name="l104"><span class="ln">104  </span></a>            putString(getString(R.string.saved_image), bitMapToString(bm))
+<a name="l105"><span class="ln">105  </span></a>            <span class="s0">if</span>(findViewById&lt;RadioButton&gt;(R.id.female_radiobutton).isChecked){
+<a name="l106"><span class="ln">106  </span></a>                putInt(getString(R.string.saved_gender), 0)
+<a name="l107"><span class="ln">107  </span></a>            }
+<a name="l108"><span class="ln">108  </span></a>            <span class="s0">else if</span>(findViewById&lt;RadioButton&gt;(R.id.male_radiobutton).isChecked){
+<a name="l109"><span class="ln">109  </span></a>                putInt(getString(R.string.saved_gender), 1)
+<a name="l110"><span class="ln">110  </span></a>            }
+<a name="l111"><span class="ln">111  </span></a>            <span class="s0">else</span>{
+<a name="l112"><span class="ln">112  </span></a>                putInt(getString(R.string.saved_gender), 2)
+<a name="l113"><span class="ln">113  </span></a>            }
+<a name="l114"><span class="ln">114  </span></a>            Toast.makeText(applicationContext, <span class="s3">&quot;Successfully saved profile information&quot;</span>, Toast.LENGTH_SHORT).show()
+<a name="l115"><span class="ln">115  </span></a>            apply()
+<a name="l116"><span class="ln">116  </span></a>        }
+<a name="l117"><span class="ln">117  </span></a>    }
+<a name="l118"><span class="ln">118  </span></a>
+<a name="l119"><span class="ln">119  </span></a>    private <span class="s0">fun </span>bitMapToString(bitmap: Bitmap): String {
+<a name="l120"><span class="ln">120  </span></a>        <span class="s0">val </span>baos = ByteArrayOutputStream()
+<a name="l121"><span class="ln">121  </span></a>        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+<a name="l122"><span class="ln">122  </span></a>        <span class="s0">val </span>b: ByteArray = baos.toByteArray()
+<a name="l123"><span class="ln">123  </span></a>        <span class="s0">return </span>Base64.encodeToString(b, Base64.DEFAULT)
+<a name="l124"><span class="ln">124  </span></a>    }
+<a name="l125"><span class="ln">125  </span></a>
+<a name="l126"><span class="ln">126  </span></a>    private <span class="s0">fun </span>stringToBitMap(encodedString: String?): Bitmap? {
+<a name="l127"><span class="ln">127  </span></a>        <span class="s0">return try </span>{
+<a name="l128"><span class="ln">128  </span></a>            <span class="s0">val </span>encodeByte =
+<a name="l129"><span class="ln">129  </span></a>                Base64.decode(encodedString, Base64.DEFAULT)
+<a name="l130"><span class="ln">130  </span></a>            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+<a name="l131"><span class="ln">131  </span></a>        } catch (e: Exception) {
+<a name="l132"><span class="ln">132  </span></a>            e.message
+<a name="l133"><span class="ln">133  </span></a>            <span class="s0">null</span>
+<a name="l134"><span class="ln">134  </span></a>        }
+<a name="l135"><span class="ln">135  </span></a>    }
+<a name="l136"><span class="ln">136  </span></a>}</pre>
+</body>
+</html>
